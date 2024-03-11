@@ -4,7 +4,7 @@ export const CheckBoxComp = ({propArray}) => {
       {propArray.map((v, i) => {
         return (
           <div>
-            <input type="checkbox" id={v.id} name={v.name} value={v.value} />
+            <input checked={v.ischeckedfn} onChange={v.handleChange} type="checkbox" id={v.id} name={v.name} value={v.value} />
             <label for="vehicle1">{v.label}</label>
           </div>
         );
