@@ -24,9 +24,26 @@ const PWGenComponent = () => {
       label: "Alphabets",
     },
   ];
+  function generateRand(max, min) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  }
+  let pwlength = 9;
+
+  const capString = () => {
+    let password = "";
+    for (let i = 0; i < pwlength; i++) {
+      const capitalLetter = generateRand(65, 90);
+      let res = String.fromCharCode(capitalLetter);
+      password += res;
+    }
+    return password;
+  };
+  const res = capString();
+
   return (
     <div>
       <h2>Strong Password Generator</h2>
+      <h3>{res}</h3>
       <fieldset className="flex">
         <CheckBoxComp propArray={numberProps} />
         <CheckBoxComp propArray={splCharProps} />
