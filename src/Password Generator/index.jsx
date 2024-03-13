@@ -1,10 +1,23 @@
 import { useState } from "react";
 import { CheckBoxComp } from "../Components/checkbox";
 const PWGenComponent = () => {
-  const [capschecked, setCapschecked] = useState(false);
-  function checkCaps() {
-    setCapschecked(!capschecked);
+  const [state, setState] = useState({
+    capschecked: false,
+    splCharCheck: false,
+  });
+  function capsCheckFn() {
+    setState({
+      ...state,
+      capschecked: !capschecked,
+    });
   }
+  function splCharCheckFn() {
+    setState({
+      ...state,
+      splCharCheck: !splCharCheck,
+    });
+  }
+  const { capschecked, splCharCheck } = state;
   const numberProps = [
     {
       id: "number",
@@ -21,8 +34,8 @@ const PWGenComponent = () => {
       name: "Special characters",
       value: "",
       label: "Special characters",
-      ischeckedfn: "",
-      handleChange: "",
+      ischeckedfn: splCharCheck,
+      handleChange: splCharCheckFn,
     },
   ];
   const wordProp = [
@@ -32,24 +45,20 @@ const PWGenComponent = () => {
       value: "",
       label: "CAPITAL LETTERS",
       ischeckedfn: capschecked,
-      handleChange: checkCaps,
+      handleChange: capsCheckFn,
     },
   ];
   function generateRand(max, min) {
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
-  let pwlength = 8;
-
+  let pwlength = 6;
   const capString = () => {
     let password = "";
-    for (let i = 0; i < pwlength; i++) {
-      const capitalLetter = generateRand(65, 90);
-      let res = String.fromCharCode(capitalLetter);
-      if (capschecked) {
-        password += res;
-      } else {
-        return;
-      }
+    while (password.length < pwlength) {
+      const capitalLetterRand = generateRand(65, 90);
+      const splCharRand = generateRand(33, 47);
+      let res = String.fromCharCode(capitalLetterRand,splCharRand);
+      password += res;
     }
     return password;
   };
@@ -58,7 +67,9 @@ const PWGenComponent = () => {
   return (
     <div>
       <h2>Strong Password Generator</h2>
-      <h3>{res}</h3>
+      <div className="password ">
+        <h3>{res}</h3>
+      </div>
       <fieldset className="flex">
         <CheckBoxComp propArray={numberProps} />
         <CheckBoxComp propArray={splCharProps} />
