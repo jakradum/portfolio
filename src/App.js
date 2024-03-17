@@ -15,7 +15,7 @@ function App() {
   const [state, setState] = useState({ enter: false, home: true });
   const { enter, home } = state;
   const goHome = () => {
-    setState({...state,home:true})
+    setState({ ...state, home: true });
   };
   return (
     <div className="App">
@@ -29,7 +29,7 @@ function App() {
           <ButtonComponent propArray={buttonProps} />
         </div>
       ) : (
-        <PWGenComponent/>
+        <PWGenComponent />
       )}
     </div>
   );
