@@ -93,8 +93,15 @@ const PWGenComponent = () => {
   });
 
   // multiple true
+  // caps and lowercase but not others
+  if (trueValues.length === 2 && capsChecked && lowercaseChecked) {
+    while (password.length < Math.floor(pwLength)) {
+      generateRandom(97, 122);
+      generateRandom(65, 90);
+    }
+  }
   // caps and lowercase and some other
-  if (trueValues.length >= 2 && capsChecked && lowercaseChecked) {
+  else if (trueValues.length >= 2 && capsChecked && lowercaseChecked) {
     while (password.length < Math.floor(pwLength / 2)) {
       generateRandom(65, 90);
       generateRandom(97, 122);
@@ -167,13 +174,6 @@ const PWGenComponent = () => {
       }
     }
   }
-   // caps and lowercase but not others
-   else if (trueValues.length === 2 && capsChecked && lowercaseChecked) {
-    while (password.length < Math.floor(pwLength)) {
-      generateRandom(97, 122);
-      generateRandom(65, 90);
-    }
-  }
 
   // nums or splchar
   else if (numsCheck && splCharCheck) {
@@ -213,7 +213,6 @@ const PWGenComponent = () => {
       <div className="password ">
         <h3>{password}</h3>
       </div>
-      {/* <p>remaining characters: {pwLength - password.length}</p> */}
       <fieldset className="flex">
         <CheckBoxComp propArray={numberProps} />
         <CheckBoxComp propArray={splCharProps} />
