@@ -2,10 +2,12 @@ import { useState } from 'react';
 import { CheckBoxComp } from '../Components/checkbox';
 const PWGenComponent = () => {
   const [state, setState] = useState({
-    capsChecked: true,
+    capsChecked: false,
     splCharCheck: null,
     numsCheck: null,
     lowercaseChecked: false,
+    lettersEnabled: true,
+    textinputEnabled: false,
   });
   function capsCheckFn() {
     setState({
@@ -31,13 +33,26 @@ const PWGenComponent = () => {
       lowercaseChecked: !lowercaseChecked,
     });
   }
-  const { capsChecked, splCharCheck, numsCheck, lowercaseChecked } = state;
+  function handleRadioCheck() {
+    setState({ ...state, lettersEnabled: !lettersEnabled, textinputEnabled: !textinputEnabled });
+  }
+  function handleInputRadioCheck() {
+    setState({
+      ...state,
+      textinputEnabled: !textinputEnabled,
+      lettersEnabled: !lettersEnabled,
+      lowercaseChecked: false,
+      capsChecked: false,
+    });
+  }
+  const { capsChecked, splCharCheck, numsCheck, lowercaseChecked, lettersEnabled, textinputEnabled } = state;
   const numberProps = [
     {
       id: 'number',
       name: 'number',
       value: 'number',
-      label: 'Number',
+      label: '123',
+      inputType: 'checkbox',
       ischeckedfn: numsCheck,
       handleChange: numsCheckFn,
     },
@@ -47,7 +62,8 @@ const PWGenComponent = () => {
       id: 'Special characters',
       name: 'Special characters',
       value: '',
-      label: 'Special characters',
+      label: '*%#',
+      inputType: 'checkbox',
       ischeckedfn: splCharCheck,
       handleChange: splCharCheckFn,
     },
@@ -57,9 +73,11 @@ const PWGenComponent = () => {
       id: 'capital letters',
       name: '',
       value: '',
-      label: 'CAPITAL LETTERS',
+      label: 'ABC',
+      inputType: 'checkbox',
       ischeckedfn: capsChecked,
       handleChange: capsCheckFn,
+      disabled: lettersEnabled,
     },
   ];
   const lowercaseProp = [
@@ -67,9 +85,11 @@ const PWGenComponent = () => {
       id: 'small letters',
       name: '',
       value: '',
-      label: 'lower case letters',
+      label: 'abc',
+      inputType: 'checkbox',
       ischeckedfn: lowercaseChecked,
       handleChange: lowercaseCheckFn,
+      disabled: lettersEnabled,
     },
   ];
 
@@ -216,8 +236,30 @@ const PWGenComponent = () => {
       <fieldset className="flex">
         <CheckBoxComp propArray={numberProps} />
         <CheckBoxComp propArray={splCharProps} />
-        <CheckBoxComp propArray={wordProp} />
-        <CheckBoxComp propArray={lowercaseProp} />
+        <div className="flex radio">
+          <div>
+            <input type="radio" id="checkboxes" onChange={handleRadioCheck} name="password" value="Choose one" />
+            <label for="html">Letters</label>
+            <div className="">
+              <CheckBoxComp propArray={wordProp} />
+              <CheckBoxComp propArray={lowercaseProp} />
+            </div>
+            <input type="radio" id="input" onChange={handleInputRadioCheck} name="password" value="Enter your own" />
+            <label for="css">Enter Custom</label>
+          </div>
+          <div className=" choices">
+            <form className="customPw">
+              <label htmlFor="typeOwn"></label>
+              <input
+                type="text"
+                placeholder="Type your own"
+                id="customText"
+                name="customText"
+                disabled={textinputEnabled}
+              />
+            </form>
+          </div>
+        </div>
       </fieldset>
     </div>
   );
