@@ -97,7 +97,7 @@ body {
   border: 2px solid black;
   margin: 1rem;
   min-height: clamp(4rem, 50vw, 7rem);
-  min-width: clamp(8rem, 50vw, 40rem);
+  min-width: clamp(22rem, 50vw, 40rem);
 }
 .flexbox{
   display: flex;
@@ -107,6 +107,7 @@ body {
 }
 input{
   margin: .5rem;
+  
 }
 .choices{
   margin-left: 1rem;
@@ -123,10 +124,22 @@ input{
 .grid > * { /* specify how much space grid items going to the next row will take up */
   grid-column: span 2;
 }
-.flexbox.radio{
+.radio{
   text-align: left;
   align-items: flex-start;
 }
 .customPw{
   height: 1rem;
+}
+.charCount{
+  font-size: clamp(.3rem, 2vw, .8rem);
+  align-self:flex-end;
+  padding: 0 1rem 0 0;
+  max-height: 1rem;
+  z-index: 10;
+}
+.password h3{
+  align-self: center;
+  justify-self: center;
+  z-index: 0;
 }

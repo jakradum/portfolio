@@ -8,6 +8,8 @@ const PWGenComponent = () => {
     lowercaseChecked: false,
     lettersEnabled: true,
     textinputEnabled: false,
+    sliderNum: 9,
+    customPW: null,
   });
   function capsCheckFn() {
     setState({
@@ -45,7 +47,13 @@ const PWGenComponent = () => {
       capsChecked: false,
     });
   }
-  const { capsChecked, splCharCheck, numsCheck, lowercaseChecked, lettersEnabled, textinputEnabled } = state;
+  function sliderChange(e) {
+    setState({ ...state, sliderNum: parseInt(e.target.value) });
+  }
+  function inputChange(e){
+    setState({...state,customPW:e.target.value})
+  }
+  const { capsChecked, splCharCheck, numsCheck, lowercaseChecked, lettersEnabled, textinputEnabled, sliderNum, customPW } = state;
   const numberProps = [
     {
       id: 'number',
@@ -93,7 +101,7 @@ const PWGenComponent = () => {
     },
   ];
 
-  let pwLength = 12;
+  let pwLength = sliderNum;
   let password = '';
 
   // random number & characters
@@ -231,8 +239,10 @@ const PWGenComponent = () => {
     <div>
       <h2>Strong Password Generator</h2>
       <div className="password ">
-        <h3>{password}</h3>
+        <h3>{password || customPW}</h3>
+        <p className='charCount'>{password.length || customPW.length} characters</p>
       </div>
+      <input onChange={sliderChange} type="range" min="6" max="40" value={sliderNum} id="myRange"></input>
       <fieldset className="flex">
         <CheckBoxComp propArray={numberProps} />
         <CheckBoxComp propArray={splCharProps} />
@@ -240,11 +250,18 @@ const PWGenComponent = () => {
           <div>
             <input type="radio" id="checkboxes" onChange={handleRadioCheck} name="password" value="Choose one" />
             <label for="html">Letters</label>
-            <div className="">
+            <div className="flexbox">
               <CheckBoxComp propArray={wordProp} />
               <CheckBoxComp propArray={lowercaseProp} />
             </div>
-            <input type="radio" id="input" onChange={handleInputRadioCheck} name="password" value="Enter your own" />
+            <input
+              type="radio"
+              id="input"
+              onChange={handleInputRadioCheck}
+              name="password"
+              value="Enter your own"
+              defaultChecked
+            />
             <label for="css">Enter Custom</label>
           </div>
           <div className=" choices">
@@ -255,6 +272,7 @@ const PWGenComponent = () => {
                 placeholder="Type your own"
                 id="customText"
                 name="customText"
+                onChange={inputChange}
                 disabled={textinputEnabled}
               />
             </form>
