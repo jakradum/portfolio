@@ -97,6 +97,7 @@ body {
   border: 2px solid black;
   margin: 1rem;
   min-height: clamp(4rem, 50vw, 7rem);
+  position: relative;
   min-width: clamp(22rem, 50vw, 40rem);
 }
 .flexbox{
@@ -134,12 +135,16 @@ input{
 .charCount{
   font-size: clamp(.3rem, 2vw, .8rem);
   align-self:flex-end;
-  padding: 0 1rem 0 0;
+  padding-right: 1rem;
+  align-self: flex-end;
   max-height: 1rem;
   z-index: 10;
+  position: absolute;
+  bottom: 0;
 }
 .password h3{
   align-self: center;
   justify-self: center;
   z-index: 0;
+  font-weight: 200;
 }

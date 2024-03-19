@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { CheckBoxComp } from '../Components/checkbox';
+
 const PWGenComponent = () => {
   const [state, setState] = useState({
     capsChecked: false,
@@ -9,7 +10,7 @@ const PWGenComponent = () => {
     lettersEnabled: true,
     textinputEnabled: false,
     sliderNum: 9,
-    customPW: null,
+    customPW: '',
   });
   function capsCheckFn() {
     setState({
@@ -36,7 +37,7 @@ const PWGenComponent = () => {
     });
   }
   function handleRadioCheck() {
-    setState({ ...state, lettersEnabled: !lettersEnabled, textinputEnabled: !textinputEnabled });
+    setState({ ...state, lettersEnabled: !lettersEnabled, textinputEnabled: !textinputEnabled, customPW: '' });
   }
   function handleInputRadioCheck() {
     setState({
@@ -50,10 +51,19 @@ const PWGenComponent = () => {
   function sliderChange(e) {
     setState({ ...state, sliderNum: parseInt(e.target.value) });
   }
-  function inputChange(e){
-    setState({...state,customPW:e.target.value})
+  function inputChange(e) {
+    setState({ ...state, customPW: e.target.value });
   }
-  const { capsChecked, splCharCheck, numsCheck, lowercaseChecked, lettersEnabled, textinputEnabled, sliderNum, customPW } = state;
+  const {
+    capsChecked,
+    splCharCheck,
+    numsCheck,
+    lowercaseChecked,
+    lettersEnabled,
+    textinputEnabled,
+    sliderNum,
+    customPW,
+  } = state;
   const numberProps = [
     {
       id: 'number',
@@ -112,7 +122,7 @@ const PWGenComponent = () => {
   };
 
   // true values
-  const allValues = [capsChecked, splCharCheck, numsCheck, lowercaseChecked];
+  const allValues = [capsChecked, splCharCheck, numsCheck, lowercaseChecked, customPW];
   let trueValues = [];
   allValues.forEach((v, i) => {
     if (v) {
@@ -120,7 +130,45 @@ const PWGenComponent = () => {
     }
   });
 
-  // multiple true
+  // logic
+  //custom input only
+  let newCustomPw = '';
+  if (customPW) {
+    for (let [i, v] of [...customPW].entries()) {
+      let randomcustomChar = Math.floor(Math.random() * customPW.length - 1);
+      if (v === ' ') {
+        continue;
+      }
+      if (i % randomcustomChar === 0) {
+        newCustomPw += v.toUpperCase();
+      } else {
+        newCustomPw += v.toString();
+      }
+    }
+  }
+  // custom inputs + spl char
+  else if (customPW && splCharCheck) {
+    for (let [i, v] of [...customPW].entries()) {
+      let randomcustomChar = Math.floor(Math.random() * customPW.length - 1);
+      if (v === ' ') {
+        continue;
+      }
+      if (i % randomcustomChar === 0) {
+        newCustomPw += v.toUpperCase();
+      } else {
+        newCustomPw += v.toString();
+      }
+    }
+    let count = 0;
+    let tempString = '';
+    while (count < newCustomPw.length) {
+      let randChar = String.fromCharCode(Math.floor(Math.random() * (47 - 33 + 1) + 33));
+      tempString += randChar;
+      count++;
+    }
+    newCustomPw += tempString;
+  }
+
   // caps and lowercase but not others
   if (trueValues.length === 2 && capsChecked && lowercaseChecked) {
     while (password.length < Math.floor(pwLength)) {
@@ -239,10 +287,17 @@ const PWGenComponent = () => {
     <div>
       <h2>Strong Password Generator</h2>
       <div className="password ">
-        <h3>{password || customPW}</h3>
-        <p className='charCount'>{password.length || customPW.length} characters</p>
+        <h3>{password || newCustomPw}</h3>
+        <p className="charCount">{password.length || newCustomPw.length} characters</p>
       </div>
-      <input onChange={sliderChange} type="range" min="6" max="40" value={sliderNum} id="myRange"></input>
+      <input
+        onChange={sliderChange}
+        type="range"
+        min="6"
+        max="40"
+        value={password.length || newCustomPw.length}
+        id="myRange"
+      ></input>
       <fieldset className="flex">
         <CheckBoxComp propArray={numberProps} />
         <CheckBoxComp propArray={splCharProps} />
@@ -272,6 +327,7 @@ const PWGenComponent = () => {
                 placeholder="Type your own"
                 id="customText"
                 name="customText"
+                value={customPW}
                 onChange={inputChange}
                 disabled={textinputEnabled}
               />
