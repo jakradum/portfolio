@@ -93,7 +93,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: clamp(.5rem, 3vw, 1.5rem);
+  font-size: clamp(1rem, 3vw, 1.5rem);
   border: 2px solid black;
   margin: 1rem;
   min-height: clamp(4rem, 50vw, 7rem);
@@ -155,4 +155,21 @@ input{
   position: absolute;
   right: 1rem;
   margin-left: 1rem;
+  cursor: pointer;
+}
+.textInput{
+  border: 1px solid black;
+  padding: 1rem;
+  min-width: 15rem;
+}
+aside{
+  text-align: left;
+  font-weight: 200;
+  margin: 1rem;
+  padding: 1rem;
+  line-height: 1.5rem;
+  font-size: .8rem;
+}
+.error{
+  height: .8rem;
 }

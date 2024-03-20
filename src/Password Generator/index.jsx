@@ -13,6 +13,7 @@ const PWGenComponent = () => {
     sliderNum: 9,
     customPW: '',
     reloadCount: 0,
+    sliderUse: false,
   });
   function capsCheckFn() {
     setState({
@@ -51,7 +52,7 @@ const PWGenComponent = () => {
     });
   }
   function sliderChange(e) {
-    setState({ ...state, sliderNum: parseInt(e.target.value) });
+    setState({ ...state, sliderNum: parseInt(e.target.value), sliderUse: !sliderUse });
   }
   function inputChange(e) {
     setState({ ...state, customPW: e.target.value });
@@ -66,6 +67,7 @@ const PWGenComponent = () => {
     sliderNum,
     customPW,
     reloadCount,
+    sliderUse,
   } = state;
   const numberProps = [
     {
@@ -126,7 +128,7 @@ const PWGenComponent = () => {
   };
 
   // true values
-  const allValues = [capsChecked, splCharCheck, numsCheck, lowercaseChecked, customPW];
+  const allValues = [capsChecked, splCharCheck, numsCheck, lowercaseChecked];
   let trueValues = [];
   allValues.forEach((v, i) => {
     if (v) {
@@ -183,7 +185,7 @@ const PWGenComponent = () => {
       }
     }
     let count = 0;
-    while (count <8) {
+    while (count < 8) {
       let randNum = Math.floor(Math.random() * (57 - 48 + 1) + 48);
       let randChar = String.fromCharCode(randNum);
       newCustomPw += randChar;
@@ -326,6 +328,8 @@ const PWGenComponent = () => {
   const handleReload = () => {
     setState({ ...state, reloadCount: reloadCount + 1 });
   };
+  // password strength
+
 
   // JSX for the password string component
   return (
@@ -348,43 +352,62 @@ const PWGenComponent = () => {
         value={password.length || newCustomPw.length}
         id="myRange"
       ></input>
-      <fieldset className="flex">
-        <CheckBoxComp propArray={numberProps} />
-        <CheckBoxComp propArray={splCharProps} />
-        <div className="flex radio">
-          <div>
-            <input type="radio" id="checkboxes" onChange={handleRadioCheck} name="password" value="Choose one" />
-            <label for="html">Letters</label>
-            <div className="flexbox">
-              <CheckBoxComp propArray={wordProp} />
-              <CheckBoxComp propArray={lowercaseProp} />
-            </div>
-            <input
-              type="radio"
-              id="input"
-              onChange={handleInputRadioCheck}
-              name="password"
-              value="Enter your own"
-              defaultChecked
-            />
-            <label for="css">Enter Custom</label>
-          </div>
-          <div className=" choices">
-            <form className="customPw">
-              <label htmlFor="typeOwn"></label>
+      <div className="error">
+        <p style={{ fontSize: '.8rem', color: 'grey' }}>
+          {customPW && sliderUse ? 'Password length is controlled by typing' : ''}
+        </p>
+      </div>
+      <div className="grid">
+        <fieldset className="flex">
+          <CheckBoxComp propArray={numberProps} />
+          <CheckBoxComp propArray={splCharProps} />
+          <div className="flex radio">
+            <div>
+              <input type="radio" id="checkboxes" onChange={handleRadioCheck} name="password" value="Choose one" />
+              <label for="html">Letters</label>
+              <div className="flexbox">
+                <CheckBoxComp propArray={wordProp} />
+                <CheckBoxComp propArray={lowercaseProp} />
+              </div>
               <input
-                type="text"
-                placeholder="Type your own"
-                id="customText"
-                name="customText"
-                value={customPW}
-                onChange={inputChange}
-                disabled={textinputEnabled}
+                type="radio"
+                id="input"
+                onChange={handleInputRadioCheck}
+                name="password"
+                value="Enter your own"
+                defaultChecked
               />
-            </form>
+              <label for="css">Enter Custom</label>
+            </div>
+            <div className=" choices">
+              <form className="customPw">
+                <label htmlFor="typeOwn"></label>
+                <input
+                  className="textInput"
+                  type="text"
+                  placeholder="Type your own"
+                  id="customText"
+                  name="customText"
+                  value={customPW}
+                  onChange={inputChange}
+                  disabled={textinputEnabled}
+                />
+              </form>
+            </div>
           </div>
-        </div>
-      </fieldset>
+        </fieldset>
+        <aside>
+          <h4>How to use this password generator</h4>
+          <ol>
+            <li>
+              Enter your own word, like name of site for which you're generating the password (Amazon, HSBC bank etc.)
+            </li>
+            <li>Or choose the 'Letters' option to generate random letters</li>
+            <li>Select additional inputs like numbers or special characters</li>
+            <li>Use the slider to control the length and use the refresh button to generate new options</li>
+          </ol>
+        </aside>
+      </div>
     </div>
   );
 };
