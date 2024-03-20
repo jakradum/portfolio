@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { CheckBoxComp } from '../Components/checkbox';
+import { ReloadIcon } from './refresh-svgrepo-com';
 
 const PWGenComponent = () => {
   const [state, setState] = useState({
@@ -11,6 +12,7 @@ const PWGenComponent = () => {
     textinputEnabled: false,
     sliderNum: 9,
     customPW: '',
+    reloadCount: 0,
   });
   function capsCheckFn() {
     setState({
@@ -63,6 +65,7 @@ const PWGenComponent = () => {
     textinputEnabled,
     sliderNum,
     customPW,
+    reloadCount,
   } = state;
   const numberProps = [
     {
@@ -113,6 +116,7 @@ const PWGenComponent = () => {
 
   let pwLength = sliderNum;
   let password = '';
+  let newCustomPw = '';
 
   // random number & characters
   const generateRandom = (min, max) => {
@@ -132,8 +136,8 @@ const PWGenComponent = () => {
 
   // logic
   //custom input only
-  let newCustomPw = '';
-  if (customPW) {
+
+  if (customPW && !splCharCheck && !numsCheck) {
     for (let [i, v] of [...customPW].entries()) {
       let randomcustomChar = Math.floor(Math.random() * customPW.length - 1);
       if (v === ' ') {
@@ -147,7 +151,7 @@ const PWGenComponent = () => {
     }
   }
   // custom inputs + spl char
-  else if (customPW && splCharCheck) {
+  else if (customPW && splCharCheck && !numsCheck) {
     for (let [i, v] of [...customPW].entries()) {
       let randomcustomChar = Math.floor(Math.random() * customPW.length - 1);
       if (v === ' ') {
@@ -160,17 +164,54 @@ const PWGenComponent = () => {
       }
     }
     let count = 0;
-    let tempString = '';
-    while (count < newCustomPw.length) {
-      let randChar = String.fromCharCode(Math.floor(Math.random() * (47 - 33 + 1) + 33));
-      tempString += randChar;
+    while (count < 8) {
+      let randNum = Math.floor(Math.random() * (47 - 33 + 1) + 33);
+      let randChar = String.fromCharCode(randNum);
+      newCustomPw += randChar;
       count++;
     }
-    newCustomPw += tempString;
+  } else if (customPW && !splCharCheck && numsCheck) {
+    for (let [i, v] of [...customPW].entries()) {
+      let randomcustomChar = Math.floor(Math.random() * customPW.length - 1);
+      if (v === ' ') {
+        continue;
+      }
+      if (i % randomcustomChar === 0) {
+        newCustomPw += v.toUpperCase();
+      } else {
+        newCustomPw += v.toString();
+      }
+    }
+    let count = 0;
+    while (count <8) {
+      let randNum = Math.floor(Math.random() * (57 - 48 + 1) + 48);
+      let randChar = String.fromCharCode(randNum);
+      newCustomPw += randChar;
+      count++;
+    }
+  } else if (customPW && splCharCheck && numsCheck) {
+    for (let [i, v] of [...customPW].entries()) {
+      let randomcustomChar = Math.floor(Math.random() * customPW.length - 1);
+      if (v === ' ') {
+        continue;
+      }
+      if (i % randomcustomChar === 0) {
+        newCustomPw += v.toUpperCase();
+      } else {
+        newCustomPw += v.toString();
+      }
+    }
+    let count = 0;
+    while (count < 8) {
+      let randNum = Math.floor(Math.random() * (57 - 33 + 1) + 33);
+      let randChar = String.fromCharCode(randNum);
+      newCustomPw += randChar;
+      count++;
+    }
   }
 
   // caps and lowercase but not others
-  if (trueValues.length === 2 && capsChecked && lowercaseChecked) {
+  else if (trueValues.length === 2 && capsChecked && lowercaseChecked) {
     while (password.length < Math.floor(pwLength)) {
       generateRandom(97, 122);
       generateRandom(65, 90);
@@ -281,20 +322,29 @@ const PWGenComponent = () => {
       }
     }
   }
+  // reload button function
+  const handleReload = () => {
+    setState({ ...state, reloadCount: reloadCount + 1 });
+  };
 
   // JSX for the password string component
   return (
     <div>
       <h2>Strong Password Generator</h2>
       <div className="password ">
-        <h3>{password || newCustomPw}</h3>
+        <div className="flexbox">
+          <h3>{password || newCustomPw}</h3>
+          <div className="reloadIcon">
+            <ReloadIcon onClick={handleReload} />
+          </div>
+        </div>
         <p className="charCount">{password.length || newCustomPw.length} characters</p>
       </div>
       <input
         onChange={sliderChange}
         type="range"
         min="6"
-        max="40"
+        max="33"
         value={password.length || newCustomPw.length}
         id="myRange"
       ></input>

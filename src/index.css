@@ -99,6 +99,8 @@ body {
   min-height: clamp(4rem, 50vw, 7rem);
   position: relative;
   min-width: clamp(22rem, 50vw, 40rem);
+  padding-right: 1rem;
+  padding-left: 1rem;
 }
 .flexbox{
   display: flex;
@@ -147,4 +149,10 @@ input{
   justify-self: center;
   z-index: 0;
   font-weight: 200;
+  margin-right: 2rem;
+}
+.reloadIcon{
+  position: absolute;
+  right: 1rem;
+  margin-left: 1rem;
 }
