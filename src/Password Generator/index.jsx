@@ -329,7 +329,7 @@ const PWGenComponent = () => {
     setState({ ...state, reloadCount: reloadCount + 1 });
   };
   // password strength
-
+  
 
   // JSX for the password string component
   return (
