@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { CheckBoxComp } from '../Components/checkbox';
-import { ReloadIcon } from './refresh-svgrepo-com';
+import { ReloadIcon } from '../Components/refresh-svgrepo-com';
 
 const PWGenComponent = () => {
   const [state, setState] = useState({

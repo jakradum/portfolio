@@ -65,21 +65,7 @@ body {
     min-width: 170px;
   }
 }
-.nav {
-  position: fixed;
-  justify-self: center;
-  top: 0;
-  /* margin-left: auto;
-  margin-right: auto; */
-  left: 0;
-  right: 0;
-  transition: all 0.3s;
-  cursor: pointer;
-}
 
-.nav:hover {
-  color: #06f;
-}
 .flex {
   display: flex;
   flex-direction: column;
