@@ -1,16 +1,19 @@
-import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
-import { ButtonComponent } from "./Components/Button";
-import { useState } from "react";
+// App.js
+import React from 'react';
 import { createRoutesFromElements, createBrowserRouter, RouterProvider, Route } from 'react-router-dom';
-import RootLayout from "./tools";
-import PWGenComponent from "./tools/strong-password-generator";
+import Home from './home'; 
+import RootLayout from './tools/index'; 
+import PWGenComponent from './tools/strong-password-generator';
+import { TicTacToe } from './tools/tic-tac-toe';
+import { ErrorElement } from './ErrorElement';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<RootLayout />}>
-      <Route path="tools/strong-password-generator" element={<PWGenComponent />} />
+    <Route errorElement={<ErrorElement/>} path="/" element={<Home />}>
+      <Route path="/tools" element={<RootLayout />}>
+        <Route path="/tools/strong-password-generator" element={<PWGenComponent />} />
+        <Route path="/tools/tic-tac-toe" element={<TicTacToe />} />
+      </Route>
     </Route>
   )
 );

@@ -53,6 +53,10 @@ body {
   color: #06f;
   fill: #06f;
 }
+.active{
+  color: rgb(83, 83, 84);
+  text-decoration: none;
+}
 
 .button-59:active {
   border-color: #06f;
@@ -71,7 +75,17 @@ body {
   flex-direction: column;
   align-items: flex-start;
   border: none;
+  align-items: center;
 }
+fieldset{
+  border: none;
+}
+
+.menu li{
+  list-style: none;
+  text-decoration: none;
+}
+
 .password {
   display: flex;
   flex-direction: column;

@@ -333,7 +333,7 @@ const PWGenComponent = () => {
 
   // JSX for the password string component
   return (
-    <div>
+    <div className='flex'>
       <h2>Strong Password Generator</h2>
       <div className="password ">
         <div className="flexbox">
@@ -344,6 +344,7 @@ const PWGenComponent = () => {
         </div>
         <p className="charCount">{password.length || newCustomPw.length} characters</p>
       </div>
+      <div>
       <input
         onChange={sliderChange}
         type="range"
@@ -352,13 +353,14 @@ const PWGenComponent = () => {
         value={password.length || newCustomPw.length}
         id="myRange"
       ></input>
+      </div>
       <div className="error">
         <p style={{ fontSize: '.8rem', color: 'grey' }}>
           {customPW && sliderUse ? 'Password length is controlled by typing' : ''}
         </p>
       </div>
       <div className="grid">
-        <fieldset className="flex">
+        <fieldset className="">
           <CheckBoxComp propArray={numberProps} />
           <CheckBoxComp propArray={splCharProps} />
           <div className="flex radio">
