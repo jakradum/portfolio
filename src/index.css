@@ -171,3 +171,16 @@ aside {
 .error {
   height: 0.8rem;
 }
+.ttt table, td, tr{
+  border: #000 solid 1px;
+  margin: .3rem;
+}
+.ttt td{
+  padding: 1rem;
+  width: 2rem;
+  height: 2rem;
+  justify-items: center;
+}
+table{
+  border: none;
+}

@@ -1,4 +1,3 @@
-// App.js
 import React from 'react';
 import { createRoutesFromElements, createBrowserRouter, RouterProvider, Route } from 'react-router-dom';
 import Home from './home'; 
