@@ -175,12 +175,14 @@ aside {
   border: #000 solid 1px;
   margin: .3rem;
 }
-.ttt td{
-  padding: 1rem;
-  width: 2rem;
-  height: 2rem;
-  justify-items: center;
+td{
+  padding: 3rem;
+  width: 3rem;
+  height: 3rem;
+  align-items: center;
+  justify-content: center;
 }
 table{
-  border: none;
+  border: solid 1px;
+  padding: 0;
 }
