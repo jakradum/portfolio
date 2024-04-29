@@ -12,25 +12,31 @@ export const gameboard = {
 export const playGame = (index) => {
   gameboard[index] = 'X';
   const computerMove = (function (index) {
-    let gameboardArray = Object.values(gameboard);
-    let emptyCells = [];
-    function updateEmpty(){
-        gameboardArray = Object.values(gameboard);
-        console.log(gameboardArray);
-    }
-    updateEmpty();
-    const checkWinner = (
-        function(){
-        let xCount = 0;
-        gameboardArray.forEach((v, i) => {
-          if (v === 'X') {
-            xCount++;
-          }
-        });
-        console.log('x:', xCount);
+    function updateEmpty() {
+      let gameboardArray = Object.values(gameboard);
+      function checkWin(start) {
+        if (start > 6) {
+          return;
         }
-    )()
-    gameboard[4] = 'O';
+        let count = 0;
+        for (let i = start; i < start + 3; i++) {
+          if (gameboardArray[i] === gameboardArray[i + 1] && gameboardArray[i] !== '') {
+            count++;
+            if (count === 2) {
+              console.log('win');
+              console.log(start);
+            }
+          } else if (count < 2) {
+            break;
+          }
+        } checkWin(start + 3)
+      } // checkWin ends here
+      checkWin(0);
+      // console.log(gameboardArray);
+    }
+
+    updateEmpty();
+    // computer move comes here
     updateEmpty();
   })();
 };
