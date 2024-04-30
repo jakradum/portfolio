@@ -14,8 +14,8 @@ export const playGame = (index) => {
   const computerMove = (function (index) {
     function updateEmpty() {
       let gameboardArray = Object.values(gameboard);
-      function checkWin(start) {
-        if (start > 6) {
+      function checkHWin(start) {
+        if (start > 5) {
           return;
         }
         let count = 0;
@@ -29,9 +29,30 @@ export const playGame = (index) => {
           } else if (count < 2) {
             break;
           }
-        } checkWin(start + 3)
-      } // checkWin ends here
-      checkWin(0);
+        }
+        checkHWin(start + 3);
+      } // checkHWin ends here
+      function checkVWin(start) {
+        if (start > 2) {
+          return;
+        }
+        let vcount = 0;
+
+        for (let i = start; i < start + 7; i += 3) {
+          if (gameboardArray[i] === gameboardArray[i + 3] && gameboardArray[i] !== '') {
+            vcount++;
+            if (vcount === 2) {
+              console.log('vertical win');
+            }
+          } else if (vcount < 2) {
+            break;
+          }
+        }
+        checkVWin(start + 1);
+      }
+      checkHWin(0);
+      checkVWin(0);
+
       // console.log(gameboardArray);
     }
 
