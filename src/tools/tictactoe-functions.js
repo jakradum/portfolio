@@ -15,7 +15,7 @@ export const playGame = (index) => {
     function updateEmpty() {
       let gameboardArray = Object.values(gameboard);
       function checkHWin(start) {
-        if (start > 5) {
+        if (start > 6) {
           return;
         }
         let count = 0;
@@ -50,8 +50,33 @@ export const playGame = (index) => {
         }
         checkVWin(start + 1);
       }
+      function checkDiagWin() {
+        let count = 0;
+        for (let i = 0; i < 9; i += 4) {
+          if (gameboardArray[i] === gameboardArray[i + 4] && gameboardArray[i] !== '') {
+            count++;
+            if (count === 2) {
+              console.log('diag win');
+            }
+          } else if (count < 2) {
+            break;
+          }
+        }
+        count = 0;
+        for (let i = 2; i < 7; i += 2) {
+          if (gameboardArray[i] === gameboardArray[i + 2] && gameboardArray[i] !== '') {
+            count++;
+            if (count === 2) {
+              console.log('diag win 2');
+            }
+          } else if (count < 2) {
+            break;
+          }
+        }
+      }
       checkHWin(0);
       checkVWin(0);
+      checkDiagWin();
 
       // console.log(gameboardArray);
     }
