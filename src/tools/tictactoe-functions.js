@@ -9,9 +9,14 @@ export const gameboard = {
   7: '',
   8: '',
 };
+let gameOver = false;
 export const playGame = (index) => {
+  if (gameOver) {
+    return;
+  }
+
   gameboard[index] = 'X';
-  const computerMove = (function (index) {
+  const computerMove = (function () {
     function updateEmpty() {
       let gameboardArray = Object.values(gameboard);
       function checkHWin(start) {
@@ -23,15 +28,14 @@ export const playGame = (index) => {
           if (gameboardArray[i] === gameboardArray[i + 1] && gameboardArray[i] !== '') {
             count++;
             if (count === 2) {
-              console.log('win');
-              console.log(start);
+              gameOver = true;
             }
           } else if (count < 2) {
             break;
           }
         }
         checkHWin(start + 3);
-      } // checkHWin ends here
+      }
       function checkVWin(start) {
         if (start > 2) {
           return;
@@ -42,7 +46,7 @@ export const playGame = (index) => {
           if (gameboardArray[i] === gameboardArray[i + 3] && gameboardArray[i] !== '') {
             vcount++;
             if (vcount === 2) {
-              console.log('vertical win');
+              gameOver = true;
             }
           } else if (vcount < 2) {
             break;
@@ -56,7 +60,7 @@ export const playGame = (index) => {
           if (gameboardArray[i] === gameboardArray[i + 4] && gameboardArray[i] !== '') {
             count++;
             if (count === 2) {
-              console.log('diag win');
+              gameOver = true;
             }
           } else if (count < 2) {
             break;
@@ -67,7 +71,7 @@ export const playGame = (index) => {
           if (gameboardArray[i] === gameboardArray[i + 2] && gameboardArray[i] !== '') {
             count++;
             if (count === 2) {
-              console.log('diag win 2');
+              gameOver = true;
             }
           } else if (count < 2) {
             break;
@@ -77,12 +81,17 @@ export const playGame = (index) => {
       checkHWin(0);
       checkVWin(0);
       checkDiagWin();
-
       // console.log(gameboardArray);
     }
-
     updateEmpty();
-    // computer move comes here
+    function compLogic(){
+      //
+    }
+    if (gameOver) {
+      return;
+    } else {
+      compLogic();
+    }
     updateEmpty();
   })();
 };

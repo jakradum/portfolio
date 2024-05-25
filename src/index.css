@@ -7,6 +7,7 @@
   --highlights: #f9f871;
 }
 
+
 body {
   display: flex;
   flex-direction: column;
@@ -47,6 +48,26 @@ body {
 .button-59:focus {
   color: #171e29;
 }
+.menu {
+  display: flex; /* Set display to flex */
+  justify-content: space-between; /* Distribute items evenly along the main axis */
+  align-items: center; /* Center items vertically */
+}
+
+.nav {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-item {
+  margin-right: 20px; /* Add some spacing between menu items */
+}
+
+.nav-item:last-child {
+  margin-right: 0; /* Remove margin from the last menu item */
+}
+
 
 .button-59:hover {
   border-color: #06f;
@@ -80,6 +101,23 @@ body {
 fieldset{
   border: none;
 }
+.nav {
+  display: flex; /* Set display to flex */
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  margin-top: 0;
+  text-decoration: none;
+}
+
+.nav-item {
+  margin-right: 20px; /* Add some spacing between menu items */
+}
+
+.nav-item:last-child {
+  margin-right: 0; /* Remove margin from the last menu item */
+}
+
 
 .menu li{
   list-style: none;
