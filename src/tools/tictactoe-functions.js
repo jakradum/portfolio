@@ -14,7 +14,6 @@ export const playGame = (index) => {
   if (gameOver) {
     return;
   }
-
   gameboard[index] = 'X';
   const computerMove = (function () {
     function updateEmpty() {
@@ -77,15 +76,14 @@ export const playGame = (index) => {
             break;
           }
         }
+        return null;
       }
-      checkHWin(0);
-      checkVWin(0);
-      checkDiagWin();
-      // console.log(gameboardArray);
+      const result =  checkHWin(0) || checkVWin(0) || checkDiagWin() || (Object.values(gameboard).includes('') ? null : 'tie');
+      return { result, gameboardArray}
     }
-    updateEmpty();
+    let { result, gameboardArray} = updateEmpty();
     function compLogic(){
-      //
+      console.log(gameboardArray);
     }
     if (gameOver) {
       return;
