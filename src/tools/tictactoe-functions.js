@@ -9,12 +9,14 @@ export const gameboard = {
   7: '',
   8: '',
 };
-let gameOver = false;
+let winnerState = false;
 export const playGame = (index) => {
-  if (gameOver) {
+  if (winnerState) {
+    console.log('win');
     return;
   }
   gameboard[index] = 'X';
+  console.log('Human move:', index);
   const computerMove = (function () {
     function updateEmpty() {
       let gameboardArray = Object.values(gameboard);
@@ -27,7 +29,9 @@ export const playGame = (index) => {
           if (gameboardArray[i] === gameboardArray[i + 1] && gameboardArray[i] !== '') {
             count++;
             if (count === 2) {
-              gameOver = true;
+              console.log('Hwin');
+              winnerState = true;
+              return gameboardArray[i];
             }
           } else if (count < 2) {
             break;
@@ -45,7 +49,9 @@ export const playGame = (index) => {
           if (gameboardArray[i] === gameboardArray[i + 3] && gameboardArray[i] !== '') {
             vcount++;
             if (vcount === 2) {
-              gameOver = true;
+              console.log('Vwin');
+              winnerState = true;
+              return gameboardArray[i];
             }
           } else if (vcount < 2) {
             break;
@@ -59,7 +65,9 @@ export const playGame = (index) => {
           if (gameboardArray[i] === gameboardArray[i + 4] && gameboardArray[i] !== '') {
             count++;
             if (count === 2) {
-              gameOver = true;
+              console.log('Dwin 1');
+              winnerState = true;
+              return gameboardArray[i];
             }
           } else if (count < 2) {
             break;
@@ -70,7 +78,9 @@ export const playGame = (index) => {
           if (gameboardArray[i] === gameboardArray[i + 2] && gameboardArray[i] !== '') {
             count++;
             if (count === 2) {
-              gameOver = true;
+              console.log('Dwin 2');
+              winnerState = true;
+              return gameboardArray[i];
             }
           } else if (count < 2) {
             break;
@@ -78,17 +88,61 @@ export const playGame = (index) => {
         }
         return null;
       }
-      const result =  checkHWin(0) || checkVWin(0) || checkDiagWin() || (Object.values(gameboard).includes('') ? null : 'tie');
-      return { result, gameboardArray}
+      const result = checkHWin(0) || checkVWin(0) || checkDiagWin() || (gameboardArray.includes('') ? null : 'tie');
+      return { result, gameboardArray };
     }
-    let { result, gameboardArray} = updateEmpty();
-    function compLogic(){
-      console.log(gameboardArray);
-    }
-    if (gameOver) {
+    // Minimax starts here
+    function minimax(depth, isMaximising) {
+      let { result, gameboardArray } = updateEmpty();
+      const scores = {
+        X: -1,
+        O: 1,
+        tie: 0,
+      };
+      if (result !== null) {
+        return { score: scores[result], move: null };
+      }
+      // maximiser loop
+      if (isMaximising) {
+        let bestScore = -Infinity;
+        let bestMove;
+        for (let i = 0; i < gameboardArray.length; i++) {
+          if (gameboardArray[i] === '') {
+            gameboard[i] = 'O';
+            let { score } = minimax(depth + 1, false);
+            gameboard[i] = '';
+            if (score > bestScore) {
+              bestScore = score;
+              bestMove = i;
+            }
+          }
+        }
+        return { score: bestScore, move: bestMove };
+      }
+
+      // minimiser loop
+      else {
+        let bestScore = Infinity;
+        let bestMove;
+        for (let i = 0; i < gameboardArray.length; i++) {
+          if (gameboardArray[i] === '') {
+            gameboard[i] = 'X';
+            let { score } = minimax(depth + 1, true);
+            gameboard[i] = '';
+            if (score < bestScore) {
+              bestScore = score;
+              bestMove = i;
+            }
+          }
+        }
+        return { score: bestScore, move: bestMove };
+      }
+    } // minimax ends
+    if (winnerState) {
       return;
     } else {
-      compLogic();
+      let { move } = minimax(0, true);
+      gameboard[move] = 'O';
     }
     updateEmpty();
   })();
