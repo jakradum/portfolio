@@ -10,63 +10,63 @@ export const gameboard = {
   8: '',
 };
 let winnerState = false;
-export const playGame = (index) => {
+
+export const playGame = async (index) => {
   if (winnerState) {
     console.log('win');
     return;
   }
-  gameboard[index] = 'X';
-  console.log('Human move:', index);
+  gameboard[index] = 'X'; // human move
+
   const computerMove = (function () {
-    function updateEmpty() {
-      let gameboardArray = Object.values(gameboard);
+    function updateEmpty(board, simulation = false) {
+      let tempWinnerState;
+      let gameboardArray = Object.values(board);
       function checkHWin(start) {
         if (start > 6) {
-          return;
+          return null;
         }
         let count = 0;
         for (let i = start; i < start + 3; i++) {
           if (gameboardArray[i] === gameboardArray[i + 1] && gameboardArray[i] !== '') {
             count++;
             if (count === 2) {
-              console.log('Hwin');
-              winnerState = true;
+              simulation ? tempWinnerState = true : winnerState = true;
               return gameboardArray[i];
             }
           } else if (count < 2) {
             break;
           }
         }
-        checkHWin(start + 3);
+        return checkHWin(start + 3);
       }
+
       function checkVWin(start) {
         if (start > 2) {
-          return;
+          return null;
         }
         let vcount = 0;
-
         for (let i = start; i < start + 7; i += 3) {
           if (gameboardArray[i] === gameboardArray[i + 3] && gameboardArray[i] !== '') {
             vcount++;
             if (vcount === 2) {
-              console.log('Vwin');
-              winnerState = true;
+              simulation ? tempWinnerState = true : winnerState = true;
               return gameboardArray[i];
             }
           } else if (vcount < 2) {
             break;
           }
         }
-        checkVWin(start + 1);
+        return checkVWin(start + 1);
       }
+
       function checkDiagWin() {
         let count = 0;
         for (let i = 0; i < 9; i += 4) {
           if (gameboardArray[i] === gameboardArray[i + 4] && gameboardArray[i] !== '') {
             count++;
             if (count === 2) {
-              console.log('Dwin 1');
-              winnerState = true;
+              simulation ? tempWinnerState = true : winnerState = true;
               return gameboardArray[i];
             }
           } else if (count < 2) {
@@ -78,8 +78,7 @@ export const playGame = (index) => {
           if (gameboardArray[i] === gameboardArray[i + 2] && gameboardArray[i] !== '') {
             count++;
             if (count === 2) {
-              console.log('Dwin 2');
-              winnerState = true;
+              simulation ? tempWinnerState = true : winnerState = true;
               return gameboardArray[i];
             }
           } else if (count < 2) {
@@ -88,29 +87,33 @@ export const playGame = (index) => {
         }
         return null;
       }
+
       const result = checkHWin(0) || checkVWin(0) || checkDiagWin() || (gameboardArray.includes('') ? null : 'tie');
       return { result, gameboardArray };
     }
+
     // Minimax starts here
-    function minimax(depth, isMaximising) {
-      let { result, gameboardArray } = updateEmpty();
+    function minimax(depth, isMaximising, board) {
+      let { result, gameboardArray } = updateEmpty(board, true);
+
       const scores = {
         X: -1,
         O: 1,
         tie: 0,
       };
+
       if (result !== null) {
         return { score: scores[result], move: null };
       }
-      // maximiser loop
+
       if (isMaximising) {
         let bestScore = -Infinity;
-        let bestMove;
+        let bestMove = null;
         for (let i = 0; i < gameboardArray.length; i++) {
           if (gameboardArray[i] === '') {
-            gameboard[i] = 'O';
-            let { score } = minimax(depth + 1, false);
-            gameboard[i] = '';
+            board[i] = 'O';
+            let { score } = minimax(depth + 1, false, board);
+            board[i] = '';
             if (score > bestScore) {
               bestScore = score;
               bestMove = i;
@@ -118,17 +121,14 @@ export const playGame = (index) => {
           }
         }
         return { score: bestScore, move: bestMove };
-      }
-
-      // minimiser loop
-      else {
+      } else {
         let bestScore = Infinity;
-        let bestMove;
+        let bestMove = null;
         for (let i = 0; i < gameboardArray.length; i++) {
           if (gameboardArray[i] === '') {
-            gameboard[i] = 'X';
-            let { score } = minimax(depth + 1, true);
-            gameboard[i] = '';
+            board[i] = 'X';
+            let { score } = minimax(depth + 1, true, board);
+            board[i] = '';
             if (score < bestScore) {
               bestScore = score;
               bestMove = i;
@@ -138,12 +138,22 @@ export const playGame = (index) => {
         return { score: bestScore, move: bestMove };
       }
     } // minimax ends
+
+    let { result, gameboardArray } = updateEmpty(gameboard);
+
     if (winnerState) {
       return;
     } else {
-      let { move } = minimax(0, true);
-      gameboard[move] = 'O';
+      let boardCopy = { ...gameboard };
+
+      
+      let { move } = minimax(0, true, boardCopy);
+      if (move !== null) {
+        gameboard[move] = 'O';
+      } else {
+      }
     }
-    updateEmpty();
+
+    updateEmpty(gameboard);
   })();
 };
