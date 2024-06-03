@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { CheckBoxComp } from '../Components/checkbox';
 import { ReloadIcon } from '../Components/refresh-svgrepo-com';
+import { CopyIcon } from '../Components/copy icon';
 
 const PWGenComponent = () => {
   const [state, setState] = useState({
@@ -15,6 +16,16 @@ const PWGenComponent = () => {
     reloadCount: 0,
     sliderUse: false,
   });
+  const handleCopy = () => {
+    const textToCopy = password || newCustomPw;
+    navigator.clipboard.writeText(textToCopy)
+      .then(() => {
+        console.log('Text copied to clipboard');
+      })
+      .catch((err) => {
+        console.error('Failed to copy text: ', err);
+      });
+  };
   function capsCheckFn() {
     setState({
       ...state,
@@ -333,26 +344,27 @@ const PWGenComponent = () => {
 
   // JSX for the password string component
   return (
-    <div className='flex'>
+    <div className="flex">
       <h2>Strong Password Generator</h2>
       <div className="password ">
         <div className="flexbox">
           <h3>{password || newCustomPw}</h3>
           <div className="reloadIcon">
+            <CopyIcon onClick={handleCopy()} />
             <ReloadIcon onClick={handleReload} />
           </div>
         </div>
         <p className="charCount">{password.length || newCustomPw.length} characters</p>
       </div>
       <div>
-      <input
-        onChange={sliderChange}
-        type="range"
-        min="6"
-        max="33"
-        value={password.length || newCustomPw.length}
-        id="myRange"
-      ></input>
+        <input
+          onChange={sliderChange}
+          type="range"
+          min="6"
+          max="33"
+          value={password.length || newCustomPw.length}
+          id="myRange"
+        ></input>
       </div>
       <div className="error">
         <p style={{ fontSize: '.8rem', color: 'grey' }}>
@@ -398,18 +410,20 @@ const PWGenComponent = () => {
             </div>
           </div>
         </fieldset>
-        <aside>
-          <h4>How to use this password generator</h4>
-          <ol>
-            <li>
-              Enter your own word, like name of site for which you're generating the password (Amazon, HSBC bank etc.)
-            </li>
-            <li>Or choose the 'Letters' option to generate random letters</li>
-            <li>Select additional inputs like numbers or special characters</li>
-            <li>Use the slider to control the length and use the refresh button to generate new options</li>
-          </ol>
-        </aside>
       </div>
+      <details>
+        <summary>
+          <h3>How to use this password generator</h3>
+        </summary>
+        <ol>
+          <li>
+            Enter your own word, like name of site for which you're generating the password (Amazon, HSBC bank etc.)
+          </li>
+          <li>Or choose the 'Letters' option to generate random letters</li>
+          <li>Select additional inputs like numbers or special characters</li>
+          <li>Use the slider to control the length and use the refresh button to generate new options</li>
+        </ol>
+      </details>
     </div>
   );
 };

@@ -172,9 +172,7 @@ input {
 }
 .charCount {
   font-size: clamp(0.3rem, 2vw, 0.8rem);
-  align-self: flex-end;
   padding-right: 1rem;
-  align-self: flex-end;
   max-height: 1rem;
   z-index: 10;
   position: absolute;
@@ -232,4 +230,64 @@ table{
 }
 .tictactoe svg{
   margin: .5rem;
+}
+.tictactoe{
+  cursor: pointer;
+}
+.winner{
+  height: 1rem;
+  margin-top: 10px;
+}
+details[open] summary ~ * {
+  animation: open 0.3s ease-in-out;
+}
+
+@keyframes open {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+details summary::-webkit-details-marker {
+  display: none;
+}
+
+details{
+  margin-top: 1rem;
+}
+
+details summary {
+  width: 100%;
+  border-top: 1px solid black;
+  position: relative;
+  cursor: pointer;
+  font-size: 1.25rem;
+  font-weight: 300;
+  list-style: none;
+}
+
+details summary:after {
+  content: "+";
+  color: black;
+  position: absolute;
+  font-size: 1.75rem;
+  line-height: 0;
+  /* margin-top: 0.75rem; */
+  right: 0;
+  font-weight: 200;
+  transform-origin: center;
+  transition: 200ms linear;
+}
+details[open] summary:after {
+  transform: rotate(45deg);
+  font-size: 2rem;
+}
+details summary {
+  outline: 0;
+}
+details li {
+  font-size: 0.95rem;
+  margin: 0 0 1rem;
 }

@@ -13,6 +13,7 @@ let winnerState = false;
 
 export const playGame = async (index) => {
   let winningCells = [];
+  let count = 0;
   if (winnerState) {
     console.log('win');
     return {winnerState, winningCells}
@@ -112,7 +113,7 @@ export const playGame = async (index) => {
     // Minimax starts here
     function minimax(depth, isMaximising, board) {
       let { result, gameboardArray } = updateEmpty(board, true);
-
+      count++;
       const scores = {
         X: -1,
         O: 1,
@@ -173,5 +174,6 @@ export const playGame = async (index) => {
 
     updateEmpty(gameboard);
   })();
+  console.log('count',count);
   return{ winnerState, winningCells }
 };

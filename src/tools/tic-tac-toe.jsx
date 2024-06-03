@@ -8,6 +8,7 @@ export const TicTacToe = () => {
   const [winner, setWinner] = useState(false);
   const [winningCells, setWinningCells] = useState([]);
   const [render, setRender] = useState(0);
+  const [winningPlayer, setWinningPlayer] = useState(null);
 
   const rerenderFn = () => {
     setRender(render + 1);
@@ -18,11 +19,16 @@ export const TicTacToe = () => {
 
   const handleClick = async (index) => {
     if (board[index] !== '' || winner) return;
-
     const { winnerState, winningCells: newWinningCells } = await playGame(index);
     setBoard(Object.values(gameboard)); // Update the board state
     setWinner(winnerState);
     setWinningCells(newWinningCells);
+
+    if (winnerState) {
+      const player = gameboard[index] === 'X' ? 'O' : 'X'; // Determine the winning player
+      setWinningPlayer(player);
+    }
+   
   };
 
   const createTable = () => {
@@ -33,6 +39,7 @@ export const TicTacToe = () => {
       for (let col = 0; col < gridSize; col++) {
         const index = row * gridSize + col; // Calculate the index based on row and column
         const value = board[index]; // Get the value from board
+
         tableColumns.push(
           <td
             key={index}
@@ -57,14 +64,17 @@ export const TicTacToe = () => {
       <div className="flexbox">
         <h2>Tic Tac Toe</h2>
       </div>
-      <div className="flexbox tictactoe">
+      <div onClick={() => handleRestart()} className="flexbox tictactoe">
         <p>New Game</p>
-        <ReloadIcon onClick={() => handleRestart()} />
+        <ReloadIcon />
       </div>
       <table>
         <tbody>{createTable()}</tbody>
       </table>
-      {/* {winner && `won`} */}
+      <div className="winner flexbox ">{winner ? ('O' ? 'Computer won' : 'You won') : ''}</div>
+      <details>
+        <summary>Number of simulations</summary>
+      </details>
     </div>
   );
 };
