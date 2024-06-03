@@ -1,32 +1,46 @@
 import { gameboard } from './tictactoe-functions';
 import React, { useState } from 'react';
-import { playGame} from './tictactoe-functions';
+import { playGame } from './tictactoe-functions';
+import { ReloadIcon } from '../Components/refresh-svgrepo-com';
 
 export const TicTacToe = () => {
-  const gameboardArray = Object.values(gameboard);
-  const [selectedCell, setSelectedCell] = useState('');
+  const [board, setBoard] = useState(Object.values(gameboard));
+  const [winner, setWinner] = useState(false);
+  const [winningCells, setWinningCells] = useState([]);
   const [render, setRender] = useState(0);
+
   const rerenderFn = () => {
     setRender(render + 1);
   };
+  const handleRestart = () => {
+    window.location.reload(); // Refresh the page
+  };
 
-  
+  const handleClick = async (index) => {
+    if (board[index] !== '' || winner) return;
+
+    const { winnerState, winningCells: newWinningCells } = await playGame(index);
+    setBoard(Object.values(gameboard)); // Update the board state
+    setWinner(winnerState);
+    setWinningCells(newWinningCells);
+  };
+
   const createTable = () => {
-    const gridSize = Math.sqrt(gameboardArray.length);
+    const gridSize = Math.sqrt(board.length);
     const tableRows = [];
     for (let row = 0; row < gridSize; row++) {
       const tableColumns = [];
       for (let col = 0; col < gridSize; col++) {
         const index = row * gridSize + col; // Calculate the index based on row and column
-        const value = gameboardArray[index]; // Get the value from gameboardArray
+        const value = board[index]; // Get the value from board
         tableColumns.push(
           <td
             key={index}
             onClick={() => {
-              setSelectedCell(playGame(index));
+              handleClick(index);
               rerenderFn();
             }}
-            
+            className={winningCells.includes(index) ? 'win' : ''}
           >
             {value}
           </td>
@@ -40,27 +54,17 @@ export const TicTacToe = () => {
 
   return (
     <div>
+      <div className="flexbox">
+        <h2>Tic Tac Toe</h2>
+      </div>
+      <div className="flexbox tictactoe">
+        <p>New Game</p>
+        <ReloadIcon onClick={() => handleRestart()} />
+      </div>
       <table>
         <tbody>{createTable()}</tbody>
       </table>
+      {/* {winner && `won`} */}
     </div>
   );
 };
-
-{
-  /* <table className="ttt">
-<tr>
-  <td></td>
-</tr>
-<tr>
-  <td></td>
-  <td></td>
-  <td></td>
-</tr>
-<tr>
-  <td></td>
-  <td></td>
-  <td></td>
-</tr>
-</table> */
-}

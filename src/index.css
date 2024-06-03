@@ -220,7 +220,8 @@ td{
   align-items: center;
   justify-content: center;
   font-size: 3rem;
-  border-style:dotted ;
+  border-style: dotted;
+  border-color: #d3d3d3;
 }
 table{
   border: solid 2.5px;
@@ -228,4 +229,7 @@ table{
 }
 .win{
   color: #06f;
+}
+.tictactoe svg{
+  margin: .5rem;
 }
