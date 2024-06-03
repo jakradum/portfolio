@@ -12,9 +12,10 @@ export const gameboard = {
 let winnerState = false;
 
 export const playGame = async (index) => {
+  let winningCells = [];
   if (winnerState) {
     console.log('win');
-    return;
+    return {winnerState, winningCells}
   }
   gameboard[index] = 'X'; // human move
 
@@ -31,7 +32,11 @@ export const playGame = async (index) => {
           if (gameboardArray[i] === gameboardArray[i + 1] && gameboardArray[i] !== '') {
             count++;
             if (count === 2) {
-              simulation ? tempWinnerState = true : winnerState = true;
+              simulation ? tempWinnerState = true : winnerState = true ;
+              if (winnerState) {
+                for(let j=start; j< start+3; j++){winningCells.push(j)}
+                console.log(winningCells, 'start:', start);
+              }
               return gameboardArray[i];
             }
           } else if (count < 2) {
@@ -51,6 +56,10 @@ export const playGame = async (index) => {
             vcount++;
             if (vcount === 2) {
               simulation ? tempWinnerState = true : winnerState = true;
+              if (winnerState) {
+                for(let j=start; j< start+7; j+=3){winningCells.push(j)}
+                console.log(winningCells, 'start:', start);
+              }
               return gameboardArray[i];
             }
           } else if (vcount < 2) {
@@ -67,6 +76,10 @@ export const playGame = async (index) => {
             count++;
             if (count === 2) {
               simulation ? tempWinnerState = true : winnerState = true;
+              if (winnerState) {
+                winningCells = [0,4,8];
+                console.log('diag1', winningCells);
+              }
               return gameboardArray[i];
             }
           } else if (count < 2) {
@@ -79,6 +92,10 @@ export const playGame = async (index) => {
             count++;
             if (count === 2) {
               simulation ? tempWinnerState = true : winnerState = true;
+              if (winnerState) {
+                winningCells = [2,4,6]
+                console.log(winningCells);
+              }
               return gameboardArray[i];
             }
           } else if (count < 2) {
@@ -156,4 +173,5 @@ export const playGame = async (index) => {
 
     updateEmpty(gameboard);
   })();
+  return{ winnerState, winningCells }
 };

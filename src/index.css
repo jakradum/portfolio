@@ -220,8 +220,12 @@ td{
   align-items: center;
   justify-content: center;
   font-size: 3rem;
+  border-style:dotted ;
 }
 table{
-  border: solid 1px;
+  border: solid 2.5px;
   padding: 0;
+}
+.win{
+  color: #06f;
 }
