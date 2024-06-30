@@ -174,6 +174,5 @@ export const playGame = async (index) => {
 
     updateEmpty(gameboard);
   })();
-  console.log('count',count);
   return{ winnerState, winningCells }
 };

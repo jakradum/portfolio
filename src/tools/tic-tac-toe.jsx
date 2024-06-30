@@ -9,6 +9,7 @@ export const TicTacToe = () => {
   const [winningCells, setWinningCells] = useState([]);
   const [render, setRender] = useState(0);
   const [winningPlayer, setWinningPlayer] = useState(null);
+  const [simulations, setSimulations] = useState(0);
 
   const rerenderFn = () => {
     setRender(render + 1);
@@ -19,10 +20,12 @@ export const TicTacToe = () => {
 
   const handleClick = async (index) => {
     if (board[index] !== '' || winner) return;
-    const { winnerState, winningCells: newWinningCells } = await playGame(index);
+    const { winnerState, winningCells: newWinningCells, count } = await playGame(index);
     setBoard(Object.values(gameboard)); // Update the board state
     setWinner(winnerState);
     setWinningCells(newWinningCells);
+    setSimulations(count);
+    
 
     if (winnerState) {
       const player = gameboard[index] === 'X' ? 'O' : 'X'; // Determine the winning player
@@ -72,9 +75,10 @@ export const TicTacToe = () => {
         <tbody>{createTable()}</tbody>
       </table>
       <div className="winner flexbox ">{winner ? ('O' ? 'Computer won' : 'You won') : ''}</div>
-      <details>
-        <summary>Number of simulations</summary>
-      </details>
+      {/* <details>
+        <summary>Why you will never win this game</summary>
+        <p>{simulations}</p>
+      </details> */}
     </div>
   );
 };
