@@ -17,25 +17,6 @@ body {
   margin: 0;
   padding: 0;
 }
-button {
-  background-color: white;
-  border: 1px solid black;
-  font-family: var(--font-fam);
-  padding: 8px 16px;
-  cursor: pointer;
-  color: black;
-  font-size: 16px;
-  border-radius: 0; /* Ensures sharp corners */
-  transition: all 0.3s ease;
-}
-
-button:hover {
-color: #06f; /* Slight grey on hover for better UX */
-}
-
-button:active {
-  color: #06f; /* Darker grey when clicked */
-}
 
 .header {
   width: 100%;

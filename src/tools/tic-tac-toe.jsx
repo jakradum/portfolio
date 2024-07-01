@@ -24,14 +24,12 @@ export const TicTacToe = () => {
     setBoard(Object.values(gameboard)); // Update the board state
     setWinner(winnerState);
     setWinningCells(newWinningCells);
-    setSimulations(count);
-    
-
+    setSimulations(prevSimulations => prevSimulations + count); // Update simulations
+  
     if (winnerState) {
       const player = gameboard[index] === 'X' ? 'O' : 'X'; // Determine the winning player
       setWinningPlayer(player);
     }
-   
   };
 
   const createTable = () => {
@@ -75,10 +73,10 @@ export const TicTacToe = () => {
         <tbody>{createTable()}</tbody>
       </table>
       <div className="winner flexbox ">{winner ? ('O' ? 'Computer won' : 'You won') : ''}</div>
-      {/* <details>
+      <details>
         <summary>Why you will never win this game</summary>
         <p>{simulations}</p>
-      </details> */}
+      </details>
     </div>
   );
 };
