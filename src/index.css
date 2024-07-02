@@ -181,11 +181,11 @@ section {
   margin: 2rem auto; /* This centers the section horizontally */
   padding: 1rem;
   width: 100%;
-  max-width: 75%;
+  max-width: 85%;
   box-sizing: border-box;
 }
 
-section h1, 
+section h1, h2, 
 section p {
   width: 80%;
   /* Remove text-align: center if you don't want centered text */
@@ -243,8 +243,7 @@ td {
   padding: 3rem;
   width: 4rem;
   height: 4rem;
-  align-items: center;
-  justify-content: center;
+  text-align: center;
   font-size: 3rem;
   border-style: dotted;
   border-color: #d3d3d3;
@@ -367,4 +366,22 @@ details li {
 
 .dropdown-menu a:hover {
   color: #333333;
+}
+.logos {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 10rem;
+  width: 100%;
+}
+
+.logos a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logos svg {
+  width: 1.5rem;
+  height: 1.5rem;
 }

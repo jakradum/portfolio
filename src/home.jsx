@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { ButtonComponent } from './Components/Button';
+import { WebsitePreview } from './Components/preview';
+import VerticalTimeline from './Components/verticalTimeline';
+import { Logos } from './Components/logos';
 
 const HomePage = () => {
   const [count, setCount] = useState(0);
@@ -9,7 +12,7 @@ const HomePage = () => {
   }
   const buttonProps = [{
     onclickfn: counterClick,
-    buttonText: `Keep going!`,
+    buttonText: `Well done!`,
   }]
   return (
     <section className="flex">
@@ -31,7 +34,7 @@ const HomePage = () => {
           : count > 30
           ? `Pls im begging u`
           : count > 20
-          ? `Please I'm trying my best`
+          ? `I'm doing my best`
           : count > 15
           ? 'I really got it, stop'
           : count > 2
@@ -39,9 +42,14 @@ const HomePage = () => {
           : count === 2
           ? `You've said that twice now`
           : count === 1
-          ? 'On it!'
-          : ''}
+          ? 'Thanks!'
+          : <br/>}
       </p>
+      {/* <hr/>
+      <h2>More about me</h2>
+      <p>My experience</p>
+      <VerticalTimeline items={timelineItems}/> */}
+      <Logos/>
     </section>
   );
 };
