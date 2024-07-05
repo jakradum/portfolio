@@ -2,6 +2,7 @@ import { gameboard } from './tictactoe-functions';
 import React, { useState } from 'react';
 import { playGame } from './tictactoe-functions';
 import { ReloadIcon } from '../Components/refresh-svgrepo-com';
+import { Logos } from '../Components/logos';
 
 export const TicTacToe = () => {
   const [board, setBoard] = useState(Object.values(gameboard));

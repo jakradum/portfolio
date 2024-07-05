@@ -16,10 +16,10 @@ const HomePage = () => {
   }]
   return (
     <section className="flex">
-      <h1>Jakradum</h1>
+      <h1>Hello.</h1>
       <p>
-        I’m copywriter with some interest in coding. Welcome to my website where you’ll find a bunch of my coding
-        projects. Hopefully, I’m adding to this as you read this. If you think it’s been a while since my last project,
+        I’m copywriter with some interest in building websites. Welcome to my website where you’ll find a bunch of my coding
+        projects using JavaScript. Hopefully, I’m adding to this as you read this. If you think it’s been a while since my last project,
         send me a little motivation by hitting this button below (it’s free). I’m thinking of putting up a blog here
         with a few of my thoughts on everything under the sun. Cheers.
       </p>
