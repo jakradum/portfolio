@@ -74,10 +74,10 @@ export const TicTacToe = () => {
         <tbody>{createTable()}</tbody>
       </table>
       <div className="winner flexbox ">{winner ? ('O' ? 'Computer won' : 'You won') : ''}</div>
-      <details>
+      {/* <details>
         <summary>Why you will never win this game</summary>
         <p>{simulations}</p>
-      </details>
+      </details> */}
     </div>
   );
 };
