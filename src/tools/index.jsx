@@ -1,30 +1,9 @@
-// RootLayout.jsx
-import React from 'react';
-import { NavLink, Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 
 const RootLayout = () => {
   return (
     <div>
-      <header className="header">
-        <menu className="menu flex">
-          <ul className="nav">
-            <li className="nav-item">
-              <NavLink className="nav" to="/tools/strong-password-generator">
-                Password Generator
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink className="nav" to="/tools/tic-tac-toe">
-                Tic Tac Toe
-              </NavLink>
-            </li>
-          </ul>
-        </menu>
-      </header>
-
-      <main>
-        <Outlet />
-      </main>
+      <Outlet />
     </div>
   );
 };

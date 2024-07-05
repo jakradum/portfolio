@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { ButtonComponent } from './Components/Button';
 import { WebsitePreview } from './Components/preview';
@@ -56,6 +56,26 @@ const HomePage = () => {
 
 const Home = () => {
   const location = useLocation();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Close dropdown when location changes
+  useEffect(() => {
+    setIsDropdownOpen(false);
+  }, [location]);
 
   return (
     <div>
@@ -66,16 +86,34 @@ const Home = () => {
               Home
             </NavLink>
           </li>
-          <li className="nav-item">
-            <NavLink className="nav" to="/tools/">
+          <li className="nav-item dropdown" ref={dropdownRef}>
+            <button className="dropdown-trigger" onClick={toggleDropdown}>
               Tools
-            </NavLink>
+            </button>
+            {isDropdownOpen && (
+              <ul className="dropdown-menu">
+                <li>
+                  <NavLink to="/tools/tic-tac-toe" onClick={() => setIsDropdownOpen(false)}>
+                    Tic Tac Toe
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/tools/strong-password-generator" onClick={() => setIsDropdownOpen(false)}>
+                    Strong Password Generator
+                  </NavLink>
+                </li>
+              </ul>
+            )}
           </li>
         </ul>
       </menu>
 
       <main>
-        {location.pathname === '/' ? <HomePage /> : <Outlet />}
+        {location.pathname === '/' ? (
+          <HomePage />
+        ) : location.pathname.startsWith('/tools') ? (
+          <Outlet />
+        ) : null}
       </main>
     </div>
   );
