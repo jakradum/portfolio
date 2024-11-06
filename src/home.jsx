@@ -102,6 +102,11 @@ const Home = () => {
                     Strong Password Generator
                   </NavLink>
                 </li>
+                <li>
+                  <NavLink to="/tools/prime-numbers" onClick={() => setIsDropdownOpen(false)}>
+                    Prime Number Finder
+                  </NavLink>
+                </li>
               </ul>
             )}
           </li>

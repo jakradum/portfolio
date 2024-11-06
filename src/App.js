@@ -4,6 +4,7 @@ import RootLayout from './tools/index';
 import PWGenComponent from './tools/strong-password-generator';
 import { TicTacToe } from './tools/tic-tac-toe';
 import { ErrorElement } from './ErrorElement';
+import { PrimeNumbers } from './tools/prime-numbers';
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
           {
             path: 'tic-tac-toe',
             element: <TicTacToe />,
+          },
+          {
+            path: 'prime-numbers',
+            element: <PrimeNumbers/>,
           },
         ],
       },

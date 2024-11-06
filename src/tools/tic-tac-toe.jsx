@@ -1,4 +1,5 @@
 import { gameboard } from './tictactoe-functions';
+import { useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 import { playGame } from './tictactoe-functions';
 import { ReloadIcon } from '../Components/refresh-svgrepo-com';
@@ -12,11 +13,19 @@ export const TicTacToe = () => {
   const [winningPlayer, setWinningPlayer] = useState(null);
   const [simulations, setSimulations] = useState(0);
 
+  const navigate = useNavigate();
+
   const rerenderFn = () => {
     setRender(render + 1);
   };
   const handleRestart = () => {
-    window.location.reload(); // Refresh the page
+
+    setBoard(Array(9).fill(''));
+    setWinner(false);
+    setWinningCells([]);
+    setWinningPlayer(null);
+    setSimulations(0);
+    Object.keys(gameboard).forEach(key => gameboard[key] = '');
   };
 
   const handleClick = async (index) => {
