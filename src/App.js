@@ -5,6 +5,7 @@ import PWGenComponent from './tools/strong-password-generator';
 import { TicTacToe } from './tools/tic-tac-toe';
 import { ErrorElement } from './ErrorElement';
 import { PrimeNumbers } from './tools/prime-numbers';
+import { MentalMath } from './tools/mental-math';
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
           {
             path: 'prime-numbers',
             element: <PrimeNumbers/>,
+          },
+          {
+            path: 'mental-math',
+            element: <MentalMath/>,
           },
         ],
       },
