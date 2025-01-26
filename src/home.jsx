@@ -4,6 +4,7 @@ import { ButtonComponent } from './Components/Button';
 import { WebsitePreview } from './Components/preview';
 import VerticalTimeline from './Components/verticalTimeline';
 import { Logos } from './Components/logos';
+import { HashRouter } from 'react-router-dom';
 
 const HomePage = () => {
   const [count, setCount] = useState(0);
