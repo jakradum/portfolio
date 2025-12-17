@@ -8,6 +8,7 @@ export const CollatzTreeBuilder = () => {
   const [visibleDepth, setVisibleDepth] = useState(0);
   const [expansionCount, setExpansionCount] = useState(0);
   const [startNumber, setStartNumber] = useState(null);
+  const [zoomLevel, setZoomLevel] = useState(1);
 
   // Check if a number is prime
   const isPrime = (num) => {
@@ -147,13 +148,28 @@ export const CollatzTreeBuilder = () => {
     }, 100);
   };
 
-  // Calculate scale based on current depth
+  // Calculate scale based on current depth and zoom
   const getScale = () => {
-    if (currentDepth <= 10) return 1;
-    if (currentDepth <= 20) return 0.85;
-    if (currentDepth <= 30) return 0.7;
-    if (currentDepth <= 40) return 0.6;
-    return 0.5;
+    let baseScale = 1;
+    if (currentDepth <= 10) baseScale = 1;
+    else if (currentDepth <= 20) baseScale = 0.85;
+    else if (currentDepth <= 30) baseScale = 0.7;
+    else if (currentDepth <= 40) baseScale = 0.6;
+    else baseScale = 0.5;
+
+    return baseScale * zoomLevel;
+  };
+
+  const handleZoomIn = () => {
+    setZoomLevel(prev => Math.min(prev + 0.2, 2));
+  };
+
+  const handleZoomOut = () => {
+    setZoomLevel(prev => Math.max(prev - 0.2, 0.3));
+  };
+
+  const handleResetZoom = () => {
+    setZoomLevel(1);
   };
 
   // Render tree node recursively with animation
@@ -337,41 +353,93 @@ export const CollatzTreeBuilder = () => {
           </div>
 
           {treeData && (
-            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-              <button
-                className="button-59"
-                onClick={handleExpandDepth}
-                disabled={expansionCount >= 5 || isCalculating}
-                style={{
-                  flex: 1,
-                  padding: '10px',
-                  opacity: expansionCount >= 5 ? 0.5 : 1,
-                  cursor: expansionCount >= 5 ? 'not-allowed' : 'pointer'
-                }}
-              >
-                {isCalculating ? 'Expanding...' : `Expand +10 Levels (${5 - expansionCount} left)`}
-              </button>
+            <>
+              <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
+                <button
+                  className="button-59"
+                  onClick={handleExpandDepth}
+                  disabled={expansionCount >= 5 || isCalculating}
+                  style={{
+                    flex: 1,
+                    padding: '10px',
+                    opacity: expansionCount >= 5 ? 0.5 : 1,
+                    cursor: expansionCount >= 5 ? 'not-allowed' : 'pointer'
+                  }}
+                >
+                  {isCalculating ? 'Expanding...' : `Expand +10 Levels (${5 - expansionCount} left)`}
+                </button>
+              </div>
 
-              {/* Legend */}
-              <div style={{ display: 'flex', gap: '12px', fontSize: '0.75rem', flexWrap: 'wrap' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <div style={{ width: '12px', height: '12px', backgroundColor: '#dc3545', borderRadius: '2px' }}></div>
-                  <span>Prime</span>
+              {/* Legend and Zoom Controls */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
+                <div style={{ display: 'flex', gap: '12px', fontSize: '0.75rem', flexWrap: 'wrap' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <div style={{ width: '12px', height: '12px', backgroundColor: '#dc3545', borderRadius: '2px' }}></div>
+                    <span>Prime</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <div style={{ width: '12px', height: '12px', backgroundColor: '#28a745', borderRadius: '2px' }}></div>
+                    <span>Non-3n</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <div style={{ width: '12px', height: '12px', backgroundColor: '#6c757d', borderRadius: '2px' }}></div>
+                    <span>Max</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <div style={{ width: '12px', height: '12px', backgroundColor: '#007bff', borderRadius: '2px' }}></div>
+                    <span>Branch</span>
+                  </div>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <div style={{ width: '12px', height: '12px', backgroundColor: '#28a745', borderRadius: '2px' }}></div>
-                  <span>Non-3n</span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <div style={{ width: '12px', height: '12px', backgroundColor: '#6c757d', borderRadius: '2px' }}></div>
-                  <span>Max</span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <div style={{ width: '12px', height: '12px', backgroundColor: '#007bff', borderRadius: '2px' }}></div>
-                  <span>Branch</span>
+
+                {/* Zoom Controls */}
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                  <button
+                    onClick={handleZoomOut}
+                    style={{
+                      padding: '6px 12px',
+                      border: '1px solid #ddd',
+                      borderRadius: '4px',
+                      backgroundColor: 'white',
+                      cursor: 'pointer',
+                      fontSize: '16px',
+                      fontWeight: 'bold'
+                    }}
+                  >
+                    −
+                  </button>
+                  <span style={{ fontSize: '0.85rem', minWidth: '60px', textAlign: 'center' }}>
+                    {Math.round(zoomLevel * 100)}%
+                  </span>
+                  <button
+                    onClick={handleZoomIn}
+                    style={{
+                      padding: '6px 12px',
+                      border: '1px solid #ddd',
+                      borderRadius: '4px',
+                      backgroundColor: 'white',
+                      cursor: 'pointer',
+                      fontSize: '16px',
+                      fontWeight: 'bold'
+                    }}
+                  >
+                    +
+                  </button>
+                  <button
+                    onClick={handleResetZoom}
+                    style={{
+                      padding: '6px 12px',
+                      border: '1px solid #ddd',
+                      borderRadius: '4px',
+                      backgroundColor: 'white',
+                      cursor: 'pointer',
+                      fontSize: '0.8rem'
+                    }}
+                  >
+                    Reset
+                  </button>
                 </div>
               </div>
-            </div>
+            </>
           )}
         </div>
       </div>
