@@ -1,10 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export const CollatzTreeBuilder = () => {
   const [exponent, setExponent] = useState('');
-  const [depth, setDepth] = useState(6);
+  const [currentDepth, setCurrentDepth] = useState(10);
   const [treeData, setTreeData] = useState(null);
   const [isCalculating, setIsCalculating] = useState(false);
+  const [visibleDepth, setVisibleDepth] = useState(0);
+  const [expansionCount, setExpansionCount] = useState(0);
+  const [startNumber, setStartNumber] = useState(null);
 
   // Check if a number is prime
   const isPrime = (num) => {
@@ -91,6 +94,16 @@ export const CollatzTreeBuilder = () => {
     return buildNode(startNum, 0);
   };
 
+  // Animate tree reveal level by level
+  useEffect(() => {
+    if (treeData && visibleDepth < currentDepth) {
+      const timer = setTimeout(() => {
+        setVisibleDepth(prev => prev + 1);
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [treeData, visibleDepth, currentDepth]);
+
   const handleCalculate = () => {
     const exp = parseInt(exponent);
 
@@ -105,19 +118,50 @@ export const CollatzTreeBuilder = () => {
     }
 
     setIsCalculating(true);
+    setVisibleDepth(0);
+    setExpansionCount(0);
 
     setTimeout(() => {
-      const startNumber = Math.pow(2, exp);
-      const n = (startNumber - 1) / 3;
-      const tree = buildTreeStructure(n, depth);
+      const num = Math.pow(2, exp);
+      const n = (num - 1) / 3;
+      setStartNumber(n);
+      const tree = buildTreeStructure(n, currentDepth);
       setTreeData(tree);
       setIsCalculating(false);
     }, 100);
   };
 
-  // Render tree node recursively
+  const handleExpandDepth = () => {
+    if (expansionCount >= 5 || !startNumber) return;
+
+    setIsCalculating(true);
+    setExpansionCount(prev => prev + 1);
+    const newDepth = currentDepth + 10;
+    setCurrentDepth(newDepth);
+
+    setTimeout(() => {
+      const tree = buildTreeStructure(startNumber, newDepth);
+      setTreeData(tree);
+      setIsCalculating(false);
+      setVisibleDepth(currentDepth); // Start animation from current depth
+    }, 100);
+  };
+
+  // Calculate scale based on current depth
+  const getScale = () => {
+    if (currentDepth <= 10) return 1;
+    if (currentDepth <= 20) return 0.85;
+    if (currentDepth <= 30) return 0.7;
+    if (currentDepth <= 40) return 0.6;
+    return 0.5;
+  };
+
+  // Render tree node recursively with animation
   const renderTreeNode = (node, isRoot = false) => {
     if (!node) return null;
+
+    // Only show nodes up to visible depth
+    if (node.depth > visibleDepth) return null;
 
     const getNodeColor = () => {
       if (node.isEndpoint) {
@@ -133,25 +177,45 @@ export const CollatzTreeBuilder = () => {
       if (node.isEndpoint) {
         if (node.reason === 'prime') return 'PRIME';
         if (node.reason === 'not 3n') return 'NON-3N';
-        if (node.reason === 'max depth') return 'MAX DEPTH';
+        if (node.reason === 'max depth') return 'MAX';
         if (node.reason === 'cycle') return 'CYCLE';
       }
       return null;
     };
 
+    const scale = getScale();
+
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '10px' }}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          margin: `${10 * scale}px`,
+          opacity: node.depth === visibleDepth ? 0 : 1,
+          animation: node.depth === visibleDepth ? 'fadeIn 0.5s ease-in forwards' : 'none'
+        }}
+      >
+        <style>
+          {`
+            @keyframes fadeIn {
+              from { opacity: 0; transform: translateY(-10px); }
+              to { opacity: 1; transform: translateY(0); }
+            }
+          `}
+        </style>
+
         {/* Node */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <div
             style={{
-              padding: '12px 20px',
+              padding: `${12 * scale}px ${20 * scale}px`,
               backgroundColor: getNodeColor(),
               color: 'white',
-              borderRadius: '8px',
+              borderRadius: `${8 * scale}px`,
               fontWeight: 'bold',
-              fontSize: '14px',
-              minWidth: '60px',
+              fontSize: `${14 * scale}px`,
+              minWidth: `${60 * scale}px`,
               textAlign: 'center',
               boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
               position: 'relative'
@@ -159,7 +223,7 @@ export const CollatzTreeBuilder = () => {
           >
             {node.value.toLocaleString()}
             {getNodeLabel() && (
-              <div style={{ fontSize: '9px', marginTop: '2px', opacity: 0.9 }}>
+              <div style={{ fontSize: `${9 * scale}px`, marginTop: '2px', opacity: 0.9 }}>
                 {getNodeLabel()}
               </div>
             )}
@@ -169,15 +233,15 @@ export const CollatzTreeBuilder = () => {
           {node.children && node.children.length > 0 && (
             <>
               {/* Vertical line down */}
-              <div style={{ width: '2px', height: '20px', backgroundColor: '#999' }}></div>
+              <div style={{ width: `${2 * scale}px`, height: `${20 * scale}px`, backgroundColor: '#999' }}></div>
 
               {/* Horizontal connector for multiple children */}
               {node.children.length > 1 && (
                 <div style={{ display: 'flex', width: '100%', justifyContent: 'center' }}>
                   <div
                     style={{
-                      width: `${node.children.length * 150}px`,
-                      height: '2px',
+                      width: `${node.children.length * 150 * scale}px`,
+                      height: `${2 * scale}px`,
                       backgroundColor: '#999',
                       position: 'relative'
                     }}
@@ -186,21 +250,21 @@ export const CollatzTreeBuilder = () => {
               )}
 
               {/* Children container */}
-              <div style={{ display: 'flex', gap: '20px', marginTop: node.children.length > 1 ? '0' : '0' }}>
+              <div style={{ display: 'flex', gap: `${20 * scale}px`, marginTop: '0' }}>
                 {node.children.map((child, idx) => (
                   <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     {/* Vertical line to child */}
-                    <div style={{ width: '2px', height: '20px', backgroundColor: '#999' }}></div>
+                    <div style={{ width: `${2 * scale}px`, height: `${20 * scale}px`, backgroundColor: '#999' }}></div>
 
                     {/* Operation label */}
                     <div
                       style={{
-                        fontSize: '11px',
+                        fontSize: `${11 * scale}px`,
                         color: '#666',
                         backgroundColor: '#f0f0f0',
-                        padding: '2px 8px',
-                        borderRadius: '4px',
-                        marginBottom: '5px',
+                        padding: `${2 * scale}px ${8 * scale}px`,
+                        borderRadius: `${4 * scale}px`,
+                        marginBottom: `${5 * scale}px`,
                         fontFamily: 'monospace'
                       }}
                     >
@@ -220,97 +284,120 @@ export const CollatzTreeBuilder = () => {
   };
 
   return (
-    <div style={{ width: '100%', minHeight: '100vh', padding: '20px' }}>
-      {/* Controls */}
-      <div style={{ maxWidth: '600px', margin: '0 auto 40px' }}>
-        <h2 style={{ textAlign: 'center', marginBottom: '10px' }}>Collatz Tree Builder</h2>
-        <p style={{ fontSize: '0.9rem', textAlign: 'center', marginBottom: '2rem', color: '#666' }}>
-          Explore the reverse Collatz conjecture tree starting from 2^n
-        </p>
-
-        <div style={{ marginBottom: '1rem' }}>
-          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
-            Enter even exponent for 2^n:
-          </label>
-          <input
-            type="number"
-            value={exponent}
-            onChange={(e) => setExponent(e.target.value)}
-            placeholder="e.g., 4 for 2^4 = 16"
-            style={{
-              width: '100%',
-              padding: '0.75rem',
-              fontSize: '1rem',
-              border: '2px solid #ddd',
-              borderRadius: '6px'
-            }}
-          />
-        </div>
-
-        <div style={{ marginBottom: '1.5rem' }}>
-          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
-            Maximum tree depth: {depth}
-          </label>
-          <input
-            type="range"
-            min="3"
-            max="8"
-            value={depth}
-            onChange={(e) => setDepth(parseInt(e.target.value))}
-            style={{ width: '100%' }}
-          />
-          <p style={{ fontSize: '0.8rem', color: '#999', marginTop: '0.25rem' }}>
-            Note: Higher depths create larger trees
+    <div style={{ width: '100%', minHeight: '100vh', backgroundColor: '#f5f5f5' }}>
+      {/* Fixed Header Controls */}
+      <div style={{
+        position: 'sticky',
+        top: 0,
+        backgroundColor: 'white',
+        borderBottom: '2px solid #ddd',
+        padding: '20px',
+        zIndex: 100,
+        boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+      }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <h2 style={{ textAlign: 'center', marginBottom: '10px', marginTop: 0 }}>Collatz Tree Builder</h2>
+          <p style={{ fontSize: '0.9rem', textAlign: 'center', marginBottom: '1.5rem', color: '#666' }}>
+            Explore the reverse Collatz conjecture tree starting from 2^n
           </p>
-        </div>
 
-        <button
-          className="button-59"
-          onClick={handleCalculate}
-          disabled={isCalculating}
-          style={{ width: '100%', padding: '12px' }}
-        >
-          {isCalculating ? 'Building Tree...' : 'Build Tree'}
-        </button>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginBottom: '15px' }}>
+            <div>
+              <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '0.9rem' }}>
+                Enter even exponent for 2^n:
+              </label>
+              <input
+                type="number"
+                value={exponent}
+                onChange={(e) => setExponent(e.target.value)}
+                placeholder="e.g., 4 for 2^4 = 16"
+                style={{
+                  width: '100%',
+                  padding: '0.75rem',
+                  fontSize: '1rem',
+                  border: '2px solid #ddd',
+                  borderRadius: '6px'
+                }}
+              />
+            </div>
 
-        {/* Legend */}
-        {treeData && (
-          <div style={{ marginTop: '20px', padding: '15px', backgroundColor: '#f8f9fa', borderRadius: '6px' }}>
-            <h4 style={{ marginTop: 0, marginBottom: '10px', fontSize: '0.9rem' }}>Legend:</h4>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px', fontSize: '0.8rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <div style={{ width: '16px', height: '16px', backgroundColor: '#dc3545', borderRadius: '3px' }}></div>
-                <span>Prime Endpoint</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <div style={{ width: '16px', height: '16px', backgroundColor: '#28a745', borderRadius: '3px' }}></div>
-                <span>Cannot be 3n</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <div style={{ width: '16px', height: '16px', backgroundColor: '#6c757d', borderRadius: '3px' }}></div>
-                <span>Max Depth</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <div style={{ width: '16px', height: '16px', backgroundColor: '#007bff', borderRadius: '3px' }}></div>
-                <span>Branch Node</span>
-              </div>
+            <div>
+              <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500', fontSize: '0.9rem' }}>
+                Current depth: {currentDepth} levels
+              </label>
+              <button
+                className="button-59"
+                onClick={handleCalculate}
+                disabled={isCalculating}
+                style={{ width: '100%', padding: '12px', marginTop: '4px' }}
+              >
+                {isCalculating ? 'Building Tree...' : treeData ? 'Rebuild Tree' : 'Build Tree'}
+              </button>
             </div>
           </div>
-        )}
+
+          {treeData && (
+            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+              <button
+                className="button-59"
+                onClick={handleExpandDepth}
+                disabled={expansionCount >= 5 || isCalculating}
+                style={{
+                  flex: 1,
+                  padding: '10px',
+                  opacity: expansionCount >= 5 ? 0.5 : 1,
+                  cursor: expansionCount >= 5 ? 'not-allowed' : 'pointer'
+                }}
+              >
+                {isCalculating ? 'Expanding...' : `Expand +10 Levels (${5 - expansionCount} left)`}
+              </button>
+
+              {/* Legend */}
+              <div style={{ display: 'flex', gap: '12px', fontSize: '0.75rem', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <div style={{ width: '12px', height: '12px', backgroundColor: '#dc3545', borderRadius: '2px' }}></div>
+                  <span>Prime</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <div style={{ width: '12px', height: '12px', backgroundColor: '#28a745', borderRadius: '2px' }}></div>
+                  <span>Non-3n</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <div style={{ width: '12px', height: '12px', backgroundColor: '#6c757d', borderRadius: '2px' }}></div>
+                  <span>Max</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <div style={{ width: '12px', height: '12px', backgroundColor: '#007bff', borderRadius: '2px' }}></div>
+                  <span>Branch</span>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* Tree Visualization */}
+      {/* Tree Visualization - Full Width */}
       {treeData && (
         <div style={{
           overflowX: 'auto',
           overflowY: 'auto',
-          maxHeight: '80vh',
-          border: '1px solid #ddd',
-          borderRadius: '8px',
-          padding: '30px',
-          backgroundColor: '#fafafa'
+          padding: '40px 20px',
+          minHeight: '500px',
+          display: 'flex',
+          justifyContent: 'center'
         }}>
           {renderTreeNode(treeData, true)}
+        </div>
+      )}
+
+      {!treeData && (
+        <div style={{
+          textAlign: 'center',
+          padding: '100px 20px',
+          color: '#999',
+          fontSize: '1.1rem'
+        }}>
+          Enter an even exponent and click "Build Tree" to visualize the Collatz tree
         </div>
       )}
     </div>
