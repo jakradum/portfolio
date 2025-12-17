@@ -112,11 +112,11 @@ const Home = () => {
                     Prime Number Finder
                   </NavLink>
                 </li>
-                <li>
-                  <NavLink to="/tools/mental-math" onClick={() => setIsDropdownOpen(false)}>
-                    Mental Math
+                {/* <li>
+                  <NavLink to="/tools/food-delivery-calculator" onClick={() => setIsDropdownOpen(false)}>
+                    Food Delivery Calculator
                   </NavLink>
-                </li>
+                </li> */}
               </ul>
             )}
           </li>

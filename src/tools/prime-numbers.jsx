@@ -21,6 +21,9 @@ export const PrimeNumbers = () => {
       prime = false; // ie it is composite
       divisor = 2;
     } else {
+      if (num % 5 === 0) {
+        res = `div by 5`
+      }
       // if the number is odd, actual prime check starts here
       let currentNum = 3;
       function isPrime() {
