@@ -6,6 +6,17 @@ export const CollatzTreeBuilder = () => {
   const [endpoints, setEndpoints] = useState([]);
   const [isCalculating, setIsCalculating] = useState(false);
 
+  // Check if a number is prime
+  const isPrime = (num) => {
+    if (num < 2) return false;
+    if (num === 2) return true;
+    if (num % 2 === 0) return false;
+    for (let i = 3; i * i <= num; i += 2) {
+      if (num % i === 0) return false;
+    }
+    return true;
+  };
+
   // Check if a number can be represented as 3n (i.e., divisible by 3)
   const canBe3n = (num) => {
     return num % 3 === 0;
@@ -50,6 +61,12 @@ export const CollatzTreeBuilder = () => {
 
       // Get possible previous numbers
       const previous = getPreviousNumbers(num);
+
+      // If this number can ONLY come from halving (not from 3n+1), and it's prime, it's an endpoint
+      if (previous.length === 1 && previous[0].operation === 'halved' && isPrime(num)) {
+        foundEndpoints.add(num);
+        return;
+      }
 
       for (const prev of previous) {
         // If this came from 3n+1 operation, check if the result is valid
@@ -185,7 +202,12 @@ export const CollatzTreeBuilder = () => {
                   }}
                 >
                   {num.toLocaleString()}
-                  {!canBe3n(num - 1) && (
+                  {isPrime(num) && (
+                    <span style={{ marginLeft: '1rem', color: '#dc3545', fontSize: '0.8rem', fontWeight: 'bold' }}>
+                      (prime endpoint)
+                    </span>
+                  )}
+                  {!isPrime(num) && !canBe3n(num - 1) && (
                     <span style={{ marginLeft: '1rem', color: '#28a745', fontSize: '0.8rem' }}>
                       (cannot be 3n)
                     </span>
