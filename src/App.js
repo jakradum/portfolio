@@ -5,7 +5,7 @@ import PWGenComponent from './tools/strong-password-generator';
 import { TicTacToe } from './tools/tic-tac-toe';
 import { ErrorElement } from './ErrorElement';
 import { PrimeNumbers } from './tools/prime-numbers';
-// import { FoodDeliveryCalculator } from './tools/food-delivery-calculator';
+import { CollatzTreeBuilder } from './tools/collatz-tree-builder';
 
 const router = createBrowserRouter([
   {
@@ -29,10 +29,10 @@ const router = createBrowserRouter([
             path: 'prime-numbers',
             element: <PrimeNumbers/>,
           },
-          // {
-          //   path: 'food-delivery-calculator',
-          //   element: <FoodDeliveryCalculator/>,
-          // },
+          {
+            path: 'collatz-tree-builder',
+            element: <CollatzTreeBuilder/>,
+          },
         ],
       },
     ],

@@ -112,11 +112,11 @@ const Home = () => {
                     Prime Number Finder
                   </NavLink>
                 </li>
-                {/* <li>
-                  <NavLink to="/tools/food-delivery-calculator" onClick={() => setIsDropdownOpen(false)}>
-                    Food Delivery Calculator
+                <li>
+                  <NavLink to="/tools/collatz-tree-builder" onClick={() => setIsDropdownOpen(false)}>
+                    Collatz Tree Builder
                   </NavLink>
-                </li> */}
+                </li>
               </ul>
             )}
           </li>
