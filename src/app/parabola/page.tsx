@@ -529,6 +529,25 @@ export default function Parabola() {
         </div>
       </div>
 
+      {/* Explanation Section */}
+      <div className="mt-8 space-y-4 text-sm text-muted-foreground border-t border-border pt-8">
+        <p>
+          A parabola is a curve that results from plotting a quadratic equation on the x-y plane. It shows how the value of &quot;y&quot; (vertical movement) corresponds to a certain value of x when plugged into the quadratic equation.
+        </p>
+        <p>
+          Any quadratic equation is in the form of ax²+bx+c and when a is less than 0 (i.e. negative) you get a parabola that opens downwards, this is because no matter how large the value of x, the negative sign in front of x² results in a negative number almost every time. The only instances where it will result in a positive number is when bx and c together &quot;cancel out&quot; or are greater than -ax².
+        </p>
+        <p>
+          The part where the parabola makes a &quot;U-turn&quot; is called the vertex. This is either the maximum or the minimum value of y. This means the vertical movement of this point is &apos;capped&apos; by the equation. And conversely, when a is positive you have a parabola that opens upward.
+        </p>
+        <p>
+          In fact you can see above the visualiser the precise point at which the bx and c terms &quot;cancel out&quot; the ax² term resulting in a zero. This value of x can also be worked out by factorising the equation.
+        </p>
+        <p className="border-t border-border pt-4 mt-4">
+          This calculator shows you both the &quot;brute forced&quot; vertex - it generates a table of 1000 possible values of x greater and lesser than the one you enter, and shows you exactly at what value of x it was that y hit the vertex. This can also be found mathematically using -b/2a and we compare the difference.
+        </p>
+      </div>
+
       {/* Data Table */}
       <div className="mt-8 space-y-4 border-t border-border pt-8">
         <div className="flex items-center justify-between">
@@ -566,6 +585,98 @@ export default function Parabola() {
             </tbody>
           </table>
         </div>
+      </div>
+
+      {/* Appendix: Roots Comparison */}
+      <div className="mt-8 space-y-6 border-t border-border pt-8">
+        <h3 className="text-sm font-medium text-muted-foreground">Appendix: Roots (where y = 0)</h3>
+
+        <div className="grid grid-cols-2 gap-8">
+          {/* Computed using quadratic formula */}
+          <div className="border border-border p-4">
+            <p className="text-xs text-muted-foreground uppercase tracking-wide mb-4">Computed using quadratic formula</p>
+            <div className="mb-4 text-muted-foreground">
+              <Tex>{`x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}`}</Tex>
+            </div>
+            {computedRoots.hasRoots ? (
+              <div className="space-y-3">
+                <div>
+                  <p className="text-xs text-muted-foreground">Discriminant (b² - 4ac)</p>
+                  <p className="text-lg font-light">{computedRoots.discriminant.toFixed(5)}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Root 1 (x₁)</p>
+                  <p className="text-2xl font-light text-accent">{computedRoots.root1?.toFixed(5)}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Root 2 (x₂)</p>
+                  <p className="text-2xl font-light text-accent">{computedRoots.root2?.toFixed(5)}</p>
+                </div>
+              </div>
+            ) : (
+              <p className="text-muted-foreground">
+                No real roots (discriminant = {computedRoots.discriminant.toFixed(2)} &lt; 0)
+              </p>
+            )}
+          </div>
+
+          {/* Found from table */}
+          <div className="border border-border p-4">
+            <p className="text-xs text-muted-foreground uppercase tracking-wide mb-4">Found from table (where y crosses 0)</p>
+            {tableRoots.root1 !== null ? (
+              <div className="space-y-3">
+                <div>
+                  <p className="text-xs text-muted-foreground">Root 1 (x₁) - near row {tableRoots.root1Index}</p>
+                  <p className="text-2xl font-light text-foreground">{tableRoots.root1.toFixed(5)}</p>
+                </div>
+                {tableRoots.root2 !== null && (
+                  <div>
+                    <p className="text-xs text-muted-foreground">Root 2 (x₂) - near row {tableRoots.root2Index}</p>
+                    <p className="text-2xl font-light text-foreground">{tableRoots.root2.toFixed(5)}</p>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <p className="text-muted-foreground">
+                No zero crossings found in table range
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Difference comparison */}
+        {computedRoots.hasRoots && tableRoots.root1 !== null && (
+          <div className="text-xs text-muted-foreground">
+            <p>
+              Difference: x₁ = {Math.abs((computedRoots.root1 ?? 0) - tableRoots.root1).toExponential(2)}
+              {tableRoots.root2 !== null && computedRoots.root2 !== null && (
+                <>, x₂ = {Math.abs(computedRoots.root2 - tableRoots.root2).toExponential(2)}</>
+              )}
+            </p>
+          </div>
+        )}
+
+        {/* Formula breakdown */}
+        {computedRoots.hasRoots && (
+          <div className="space-y-3 pt-4 border-t border-border">
+            <p className="text-xs text-muted-foreground uppercase tracking-wide">Formula breakdown</p>
+            <div className="text-muted-foreground">
+              <Tex>{`x = \\frac{-(${bNum}) \\pm \\sqrt{(${bNum})^2 - 4(${aNum})(${cNum})}}{2(${aNum})}`}</Tex>
+            </div>
+            <div className="text-muted-foreground">
+              <Tex>{`x = \\frac{${-bNum} \\pm \\sqrt{${bNum * bNum} - ${4 * aNum * cNum}}}{${2 * aNum}}`}</Tex>
+            </div>
+            <div className="text-muted-foreground">
+              <Tex>{`x = \\frac{${-bNum} \\pm \\sqrt{${computedRoots.discriminant}}}{${2 * aNum}}`}</Tex>
+            </div>
+            <div className="text-muted-foreground">
+              <Tex>{`x = \\frac{${-bNum} \\pm ${Math.sqrt(computedRoots.discriminant).toFixed(5)}}{${2 * aNum}}`}</Tex>
+            </div>
+            <div className="text-accent">
+              <Tex>{`x_1 = ${computedRoots.root1?.toFixed(5)}, \\quad x_2 = ${computedRoots.root2?.toFixed(5)}`}</Tex>
+            </div>
+          </div>
+        )}
       </div>
     </VisualizerLayout>
   );

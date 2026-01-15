@@ -8,11 +8,6 @@ const visualizers = [
     description: "See sequences unfold on a number line",
   },
   {
-    slug: "age-ratio",
-    title: "Parent-Child Age Ratio",
-    description: "Watch ratios approach but never reach 100%",
-  },
-  {
     slug: "parabola",
     title: "Parabola Vertex Finder",
     description: "Brute force meets -b/2a",
@@ -23,19 +18,9 @@ const visualizers = [
     description: "Binomial coefficients visualized",
   },
   {
-    slug: "prime-finder",
-    title: "Prime Number Finder",
-    description: "The geometry of divisibility",
-  },
-  {
-    slug: "square-root",
-    title: "Geometric Square Root",
-    description: "Classical construction, no calculator",
-  },
-  {
-    slug: "pattern",
-    title: "Pattern Generator",
-    description: "Repeating geometric designs",
+    slug: "number-tree",
+    title: "Number Tree",
+    description: "Primes as roots, composites as branches",
   },
 ];
 
