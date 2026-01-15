@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const visualizers = [
   {
@@ -41,27 +42,29 @@ const visualizers = [
 export default function Home() {
   return (
     <div className="min-h-screen bg-background">
-      <main className="mx-auto max-w-5xl px-6 py-16">
-        <header className="mb-16">
-          <h1 className="text-4xl font-light tracking-tight text-foreground">
-            MathSee
-          </h1>
-          <p className="mt-4 max-w-xl text-lg text-muted-foreground">
-            Interactive visualizers that show you the answer and why the answer is true.
-          </p>
-        </header>
+      <header className="border-b border-border">
+        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+          <h1 className="text-lg font-medium text-foreground">MathSee</h1>
+          <ThemeToggle />
+        </div>
+      </header>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <main className="mx-auto max-w-5xl px-6 py-12">
+        <p className="mb-12 max-w-xl text-muted-foreground">
+          Interactive visualizers that show you the answer and why the answer is true.
+        </p>
+
+        <div className="grid gap-px bg-border sm:grid-cols-2 lg:grid-cols-3">
           {visualizers.map((viz) => (
             <Link
               key={viz.slug}
               href={`/${viz.slug}`}
-              className="group rounded-lg border border-border bg-card p-6 transition-colors hover:border-foreground/20 hover:bg-accent"
+              className="group bg-background p-6 transition-colors hover:bg-accent"
             >
-              <h2 className="font-medium text-card-foreground group-hover:text-foreground">
+              <h2 className="font-medium text-foreground">
                 {viz.title}
               </h2>
-              <p className="mt-2 text-sm text-muted-foreground">
+              <p className="mt-2 text-sm text-muted-foreground group-hover:text-accent-foreground">
                 {viz.description}
               </p>
             </Link>
