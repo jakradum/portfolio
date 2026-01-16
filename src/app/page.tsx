@@ -22,6 +22,11 @@ const visualizers = [
     title: "Number Tree",
     description: "Primes as roots, composites as branches",
   },
+  {
+    slug: "probabilitree",
+    title: "Probabilitree",
+    description: "Hypergeometric probability visualized",
+  },
 ];
 
 export default function Home() {

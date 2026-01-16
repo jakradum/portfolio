@@ -227,6 +227,22 @@ export default function CoinToss() {
           </div>
         </div>
       </div>
+
+      {/* Explanation */}
+      <div className="mt-8 space-y-4 text-sm text-muted-foreground border-t border-border pt-8">
+        <p>
+          This is a simple visualizer to show you how the probability of getting a certain % of your tosses (say 50%) as heads (or tails). For instance, the probability of getting half your tosses as H or T never goes over, well, 50%. The fewer the number of tosses, the higher the probability of any one single outcome.
+        </p>
+        <p>
+          By symmetry, heads and tails are equally likely. So P(heads &gt; 50%) = P(tails &gt; 50%). Since these two events can&apos;t both happen at once (you can&apos;t have more than half heads AND more than half tails), each probability is at most 50%.
+        </p>
+        <p>
+          Here&apos;s a fun paradox: getting <strong className="text-foreground">exactly</strong> 50% heads is the single most likely outcome - yet its probability shrinks toward zero as you flip more coins. For 100 flips, landing exactly 50 heads has only about an 8% chance.
+        </p>
+        <p>
+          The &quot;most likely&quot; outcome can still be quite unlikely. Each additional flip spreads the probability across more possible outcomes.
+        </p>
+      </div>
     </VisualizerLayout>
   );
 }
