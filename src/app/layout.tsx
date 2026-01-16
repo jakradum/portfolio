@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "MathSee",
+  title: "Numberstruck",
   description: "Interactive math visualizers — see the proof, not just the answer",
 };
 

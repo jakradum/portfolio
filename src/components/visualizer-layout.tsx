@@ -16,7 +16,7 @@ export function VisualizerLayout({ title, children }: VisualizerLayoutProps) {
               href="/"
               className="text-sm text-muted-foreground transition-colors hover:text-foreground"
             >
-              MathSee
+              Numberstruck
             </Link>
             <span className="text-muted-foreground">/</span>
             <h1 className="font-medium text-foreground">{title}</h1>
