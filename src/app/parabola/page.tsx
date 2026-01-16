@@ -535,16 +535,16 @@ export default function Parabola() {
           A parabola is a curve that results from plotting a quadratic equation on the x-y plane. It shows how the value of &quot;y&quot; (vertical movement) corresponds to a certain value of x when plugged into the quadratic equation.
         </p>
         <p>
-          Any quadratic equation is in the form of ax²+bx+c and when a is less than 0 (i.e. negative) you get a parabola that opens downwards, this is because no matter how large the value of x, the negative sign in front of x² results in a negative number almost every time. The only instances where it will result in a positive number is when bx and c together &quot;cancel out&quot; or are greater than -ax².
+          Any quadratic equation is in the form of ax²+bx+c and when a is less than 0 (i.e. negative) you get a parabola that opens downwards, this is because no matter how large the value of x, the negative sign in front of x² results in a negative number almost every time. The only instances where it will result in a non-negative number is when bx and c together &quot;cancel out&quot; or are greater than -ax².
         </p>
         <p>
           The part where the parabola makes a &quot;U-turn&quot; is called the vertex. This is either the maximum or the minimum value of y. This means the vertical movement of this point is &apos;capped&apos; by the equation. And conversely, when a is positive you have a parabola that opens upward.
         </p>
         <p>
-          In fact you can see above the visualiser the precise point at which the bx and c terms &quot;cancel out&quot; the ax² term resulting in a zero. This value of x can also be worked out by factorising the equation.
+          In fact you can see below in the appendix section, the precise point at which the bx and c terms &quot;cancel out&quot; the ax² term resulting in a zero. This value of x can also be worked out by factorising the equation, or through the quadratic formula.
         </p>
         <p className="border-t border-border pt-4 mt-4">
-          This calculator shows you both the &quot;brute forced&quot; vertex - it generates a table of 1000 possible values of x greater and lesser than the one you enter, and shows you exactly at what value of x it was that y hit the vertex. This can also be found mathematically using -b/2a and we compare the difference.
+          This calculator shows you both the &quot;brute forced&quot; vertex - it generates a table of 1000 possible values of x greater and lesser than the one you enter, and shows you exactly at what value of x it was that y hit the vertex; but since this is iterative the answer is often less than precise. The vertex is best found mathematically using -b/2a and we compare the difference.
         </p>
       </div>
 
