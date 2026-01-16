@@ -686,7 +686,7 @@ export default function Probabilitree() {
           Probability is best understood through the lens of <strong className="text-foreground">combinatorics</strong> — a branch of maths that has to do with permutations and combinations — because this way you account for every possible scenario (both desired and total).
         </p>
         <p>
-          Personally, I understood this first through the famous <a href="https://www.ucd.ie/mathstat/t4media/1.%20The%20handshake%20puzzle.pdf" target="_blank" rel="noopener noreferrer" className="text-accent underline underline-offset-2 hover:text-accent/80">handshake problem</a>, which asks: how many handshakes are possible among a group of n persons where no two persons shake hands with each other more than once? This is the basis for &quot;selections&quot;.
+          Personally, I understood this first through the famous <a href="https://www.ucd.ie/mathstat/t4media/1.%20The%20handshake%20puzzle.pdf" target="_blank" rel="noopener noreferrer" className="text-accent underline underline-offset-2 hover:text-accent/80">handshake problem</a>, which asks: how many handshakes are possible among a group of n persons where no two persons shake hands with each other more than once? This is the basis for &quot;selections&quot;. That's part of the reason why I've visualised selecting the purple objects by arranging them in a circle. It's akin to asking - how many connections exist between any <i>n</i> points in the circle.
         </p>
       </div>
     </VisualizerLayout>
