@@ -3,6 +3,8 @@
 import { useState, useMemo, useCallback, useRef, useEffect } from "react";
 import { VisualizerLayout } from "@/components/visualizer-layout";
 import { Input } from "@/components/ui/input";
+import katex from "katex";
+import "katex/dist/katex.min.css"; 
 import { Label } from "@/components/ui/label";
 
 // Check if a number is prime
@@ -32,6 +34,42 @@ function getPrimeFactors(n: number): number[] {
   }
   return factors;
 }
+
+// Get formatted prime factorization (e.g. "2^3 × 43")
+function getFactorizationLatex(n: number): string {
+  if (n < 2) return "";
+  const parts: string[] = [];
+  let remaining = n;
+
+  for (let p = 2; p <= remaining; p++) {
+    if (remaining % p === 0) {
+      let count = 0;
+      while (remaining % p === 0) {
+        count++;
+        remaining /= p;
+      }
+      // LaTeX: base^{exponent}
+      parts.push(count > 1 ? `${p}^{${count}}` : `${p}`);
+    }
+  }
+  // Use \times for the multiplication symbol
+  return parts.join(" \\times ");
+}
+
+// Simple Reusable Math Component
+const MathDisplay = ({ formula }: { formula: string }) => {
+  const html = katex.renderToString(formula, {
+    throwOnError: false,
+    displayMode: false, // Inline mode
+  });
+  
+  return (
+    <span 
+      dangerouslySetInnerHTML={{ __html: html }} 
+      className="text-base text-accent" // text-base fixes sizing issues
+    />
+  );
+};
 
 // Get all multiples of a number up to max
 function getMultiples(n: number, max: number): number[] {
@@ -200,19 +238,29 @@ export default function NumberTree() {
       </div>
 
       {/* Hover info */}
-      <div className="mb-4 h-6">
+      <div className="mb-4 h-8 flex items-center">
         {hoveredNode !== null && (
-          <p className="text-sm">
+          <div className="text-sm flex items-center gap-2">
             {nodes.get(hoveredNode)?.isPrime ? (
-              <span className="text-accent">
-                <span className="font-medium">{hoveredNode}</span> is prime → gives rise to {getMultiples(hoveredNode, maxN).length} multiples{getMultiples(hoveredNode, maxN).length === 0 ? ` (under ${maxN})` : ""}
+              <span className="text-accent flex items-center gap-2">
+                <span className="font-medium">{hoveredNode}</span>
+                <span>is prime → gives rise to {getMultiples(hoveredNode, maxN).length} multiples</span>
               </span>
             ) : (
-              <span className="text-foreground">
-                <span className="font-medium">{hoveredNode}</span> = {getPrimeFactors(hoveredNode).join(" × ")} → comes from {getPrimeFactors(hoveredNode).length} prime{getPrimeFactors(hoveredNode).length > 1 ? "s" : ""}
+              <span className="text-foreground flex items-center gap-1.5">
+                <span className="font-medium">{hoveredNode}</span>
+                <span>=</span>
+
+                {/* Render the Math */}
+                <MathDisplay formula={getFactorizationLatex(hoveredNode)} />
+
+                <span className="text-muted-foreground ml-1">
+                  → from {getPrimeFactors(hoveredNode).length} unique prime
+                  {getPrimeFactors(hoveredNode).length > 1 ? 's' : ''}
+                </span>
               </span>
             )}
-          </p>
+          </div>
         )}
       </div>
 
@@ -222,7 +270,7 @@ export default function NumberTree() {
           {/* SVG overlay for connections */}
           <svg
             className="absolute inset-0 pointer-events-none"
-            style={{ width: "100%", height: gridHeight, zIndex: 5 }}
+            style={{ width: '100%', height: gridHeight, zIndex: 5 }}
           >
             {highlightedConnections.map(({ from, to }, i) => {
               const fromPos = getNodePosition(from);
@@ -282,22 +330,21 @@ export default function NumberTree() {
                   className={`
                     relative flex items-center justify-center cursor-pointer transition-all duration-150
                     border
-                    ${isHovered
-                      ? "bg-accent border-accent text-background"
-                      : isHighlighted
-                      ? isPrimeNum
-                        ? "bg-accent/20 border-accent text-accent"
-                        : "bg-muted border-accent text-foreground"
-                      : isPrimeNum
-                      ? "border-accent/50 text-accent"
-                      : "border-border text-muted-foreground"
+                    ${
+                      isHovered
+                        ? 'bg-accent border-accent text-background'
+                        : isHighlighted
+                        ? isPrimeNum
+                          ? 'bg-accent/20 border-accent text-accent'
+                          : 'bg-muted border-accent text-foreground'
+                        : isPrimeNum
+                        ? 'border-accent/50 text-accent'
+                        : 'border-border text-muted-foreground'
                     }
                   `}
                   style={{ height: gridConfig.cellHeight }}
                 >
-                  <span className={`${gridConfig.fontSize} ${isPrimeNum ? "font-medium" : ""}`}>
-                    {num}
-                  </span>
+                  <span className={`${gridConfig.fontSize} ${isPrimeNum ? 'font-medium' : ''}`}>{num}</span>
                 </div>
               );
             })}
@@ -320,31 +367,34 @@ export default function NumberTree() {
       {/* Explanation */}
       <div className="mt-8 space-y-4 text-sm text-muted-foreground border-t border-border pt-8">
         <p>
-          This visualizes the relationship between prime numbers and composite numbers. Primes are the &quot;seeds&quot; of the number system - each birthing many numbers.
+          This visualizes the relationship between prime numbers and composite numbers. Primes are the &quot;seeds&quot;
+          of the number system - each birthing many numbers.
         </p>
         <p>
-          <strong className="text-foreground">Hover on a prime</strong> to see all the numbers it &quot;gives rise to&quot; - its multiples. For example, hovering on 2 highlights all even numbers.
+          <strong className="text-foreground">Hover on a prime</strong> to see all the numbers it &quot;gives rise
+          to&quot; - its multiples. For example, hovering on 2 highlights all even numbers.
         </p>
         <p>
-          <strong className="text-foreground">Hover on a composite</strong> to trace back to the primes it &quot;comes from&quot; - its prime factors. For example, 12 traces back to both 2 and 3.
+          <strong className="text-foreground">Hover on a composite</strong> to trace back to the primes it &quot;comes
+          from&quot; - its prime factors. For example, 12 traces back to both 2 and 3.
         </p>
-        <p>
-          Every composite number is uniquely determined by its prime factors (Fundamental Theorem of Arithmetic).
-        </p>
+        <p>Every composite number is uniquely determined by its prime factors (Fundamental Theorem of Arithmetic).</p>
         <p className="border-t border-border pt-4 mt-4">
-          Primes are the basis for all numbers, but composites present their own fascinating side. As you interact with this tool, try hovering on the composites - how many lines do you generally see? 2? 3? 4?
+          Primes are the basis for all numbers, but composites present their own fascinating side. As you interact with
+          this tool, try hovering on the composites - how many lines do you generally see? 2? 3? 4?
         </p>
         <p>
-          You&apos;ll never see 5 lines tracing back to primes from any composite up to 500. But you will see 4. Which numbers are they? One way to find these composites with the most distinct prime factors is straightforward - multiply as many small primes as you can while keeping the product under 500. Try <strong className="text-foreground">210</strong> - it&apos;s 2 × 3 × 5 × 7.
+          You&apos;ll never see 5 lines tracing back to primes from any composite up to 500. But you will see 4. Which
+          numbers are they? One way to find these composites with the most distinct prime factors is straightforward -
+          multiply as many small primes as you can while keeping the product under 500. Try{' '}
+          <strong className="text-foreground">210</strong> - it&apos;s 2 × 3 × 5 × 7.
         </p>
       </div>
 
       {/* Prime list */}
       <div className="mt-8 space-y-4 border-t border-border pt-8">
         <h3 className="text-sm font-medium text-muted-foreground">Primes up to {maxN}</h3>
-        <p className="text-accent">
-          {primes.join(", ")}
-        </p>
+        <p className="text-accent">{primes.join(', ')}</p>
       </div>
     </VisualizerLayout>
   );
