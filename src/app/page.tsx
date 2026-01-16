@@ -44,7 +44,7 @@ export default function Home() {
           <i>Algebra's like sheet music. The important thing isn't can you read music, it's can you hear it. Can you hear the music?</i>
           <i><strong> - Neils Bohr</strong> [Oppenheimer 2023]</i> 
         </p>
-       <p>Maths is best enjoyed visually. The world's best designers, mathematicians, and programmers have attempted to make maths visual. This attempt is my own - some of the visual ideas here are my own, and some are borrowed.</p>
+       <p>Maths is best enjoyed visually. The world's best designers, mathematicians, and programmers have attempted to make maths visual. This is my shot at it - some of the visual ideas here are my own, and some are borrowed.</p>
         <div className="mt-16 grid gap-px bg-border sm:grid-cols-2 lg:grid-cols-3 border border-border">
           {visualizers.map((viz) => (
             <Link
