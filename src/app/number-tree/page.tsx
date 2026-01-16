@@ -320,7 +320,7 @@ export default function NumberTree() {
       {/* Explanation */}
       <div className="mt-8 space-y-4 text-sm text-muted-foreground border-t border-border pt-8">
         <p>
-          This visualizes the relationship between prime numbers and composite numbers. Primes are the &quot;roots&quot; of the number system - they cannot be broken down into smaller factors.
+          This visualizes the relationship between prime numbers and composite numbers. Primes are the &quot;seeds&quot; of the number system - each birthing many numbers.
         </p>
         <p>
           <strong className="text-foreground">Hover on a prime</strong> to see all the numbers it &quot;gives rise to&quot; - its multiples. For example, hovering on 2 highlights all even numbers.

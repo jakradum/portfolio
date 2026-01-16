@@ -321,6 +321,19 @@ export default function APGenerator() {
           </div>
         </div>
       </div>
+
+      {/* Explanation */}
+      <div className="mt-8 space-y-4 text-sm text-muted-foreground border-t border-border pt-8">
+        <p>
+          Arithmetic progressions to me are the simplest and most abundant use of algebra in daily life. Say you&apos;re driving out of town, and you enter the highway at the 12th kilometre mark right at a gas station, and there&apos;s a gas station every 20 kilometres, how many gas stations will you have crossed right before 100-kilometre mark? You can use this tool to visualise this and other such progressions.
+        </p>
+        <p>
+          Odd numbers on the number line are also arithmetic progressions, as are multiples of any number. The formulas listed above are the textbook way of doing this, but you could also achieve this through a number of other ways, given how fundamental they are to our understanding of the number line.
+        </p>
+        <p>
+          The answer is <strong className="text-foreground">92</strong>, by the way.
+        </p>
+      </div>
     </VisualizerLayout>
   );
 }
